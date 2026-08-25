@@ -1,0 +1,17 @@
+# Local Claude Code state (settings.local.json, session scratch) — not published,
+# but keep the shared settings.json (includeCoAuthoredBy) that the org standardizes on
+.claude/*
+!.claude/settings.json
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# OS / editor cruft
+.DS_Store
+*.swp
+.idea/
+.vscode/*
+# ...but keep the shared cspell dictionary (used by the spellcheck workflow)
+!.vscode/cspell.json
+.history
