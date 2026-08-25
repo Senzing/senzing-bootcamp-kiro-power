@@ -1,0 +1,18 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "bootcamp",
+    "claude",
+    "CODEOWNER",
+    "cooldown",
+    "kernelsam",
+    "kiro",
+    "pycache",
+    "SENZING",
+    "Senzing"
+  ],
+  "ignorePaths": [
+    ".git/**"
+  ]
+}
