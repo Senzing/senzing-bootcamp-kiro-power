@@ -34,9 +34,12 @@ at a glance which template release a Power carries.
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`.
 - A `Validate power` workflow and `.github/tools/validate_power.py`, which checks
   Agent Plugins schema conformance, skill-name/directory agreement, build-manifest
-  drift, that every `${PLUGIN_ROOT}` path the content names resolves, that every
-  shipped script compiles, and that no reference to the upstream Claude plugin
-  survives.
+  drift, that every `${PLUGIN_ROOT}` and `<this-skill-dir>` path the content names
+  resolves, that every shipped script compiles, and that no reference survives to
+  the upstream Claude plugin, to a hook trigger or frontmatter key Kiro does not
+  have, to an upstream file the build does not port, or to port-status language
+  like "a later porting phase". Every check is negative-tested: each one has been
+  confirmed to fail on an injected regression, not just to pass on a clean tree.
 
 ### Fixed
 
@@ -70,6 +73,40 @@ them found by the checks now in `Validate power`:
   `mcp.json`.
 - The README's example recap PDF linked to a personal development repository
   rather than the copy in this repository.
+- The bootcamper's own project layout was corrupted in nine places. `src/scripts/`
+  — where INV-050 puts the project's utilities, and where Module 2 has the
+  bootcamper create `senzing-env.sh` — had been rewritten to
+  `src/../bootcamp-onboarding/scripts/`, one level above their project. Ten more
+  Markdown links pointed at `../../../bootcamp-onboarding/scripts/`, also outside
+  the Power.
+- Content told the bootcamper that a `SessionEnd` hook stops their Docker or
+  PostgreSQL containers on exit. Kiro has no session-end trigger and no
+  pre-compaction trigger, so nothing stopped them and nothing folded the recap
+  checkpoint. Both are now stated as the guide's own responsibility at session
+  close-out, which is what the Tier 1 instructions already required. Two shipped
+  scripts that can never fire in Kiro (`precompact-recap.py`, `session-end.py`)
+  now say so in their first paragraph, and name the instruction that carries the
+  behavior instead.
+- `docs/model-selection.md` was built on per-skill `model:` / `effort:` frontmatter
+  and a `context: fork` escape hatch. Kiro's skill frontmatter has none of those
+  keys, and an unrecognized key is a silent no-op, so the document was advising a
+  setting that would look applied and do nothing. It now records Kiro's actual
+  component set, including that reasoning effort is session-level only and has no
+  per-sub-agent equivalent.
+- Around forty passages carried development-status notes from the port — "the Kiro
+  `X.py` helper is a later porting phase; for now, do Y". They named helpers this
+  Power does not ship, in a repository where "Kiro" now means the Power itself, so
+  they read as a reference to something present. Each now states plainly that no
+  such helper is bundled, and keeps the instruction that was already beside it.
+- Dangling references to `hooks/README.md`, an upstream file the build deliberately
+  does not port.
+- A passage claimed bootcamp hooks ship active with the Power and that no install
+  step exists. Kiro does not load hooks bundled in a Power: installation is opt-in
+  and consented, and the bootcamp is complete with none installed.
+- Prose called the artifact a plugin throughout. It is a Power. The manifest
+  filename, `PLUGIN_ROOT`, the `**Plugin version:**` recap field, the `plugin`
+  triage verdict, and the feedback filename are unchanged — those are identifiers
+  and data values, not prose.
 
 [0.5.1]: https://github.com/Senzing/senzing-bootcamp-kiro-power/releases/tag/0.5.1
 [Senzing MCP server]: https://mcp.senzing.com/mcp

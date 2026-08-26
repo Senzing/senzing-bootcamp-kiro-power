@@ -50,8 +50,8 @@ language.
 **Success indicator:** ✅ SDK installed + DB configured + test passes + an engine-class call
 (`SzEngine`/`SzDiagnostic`) succeeds — a version query alone does not qualify (Step 9).
 
-> **User reference:** A detailed background document for this module (`MODULE_2_SDK_SETUP.md`)
-> is a later porting phase. For now, teach the steps directly from this skill.
+> **User reference:** There is no separate background document for this module. Teach the
+> steps directly from this skill.
 
 ## Error Handling
 
@@ -60,8 +60,8 @@ When the bootcamper hits an error during this module:
 1. **SENZ error code** (message contains `SENZ` + digits, e.g. `SENZ2027`): call
    `explain_error_code(error_code="<code>", version="current")` and present the explanation and
    recommended fix. If it returns nothing, continue to step 2.
-2. Present the matching pitfall/fix for this module (full `common-pitfalls` reference is a
-   later porting phase; for now, use `search_docs` to look up the symptom).
+2. Present the matching pitfall/fix for this module. There is no bundled `common-pitfalls`
+   reference, so use `search_docs` to look up the symptom.
 3. If no match, use `search_docs` against the Troubleshooting-by-Symptom guidance and general
    pitfalls.
 
@@ -133,7 +133,7 @@ install is never replaced without the bootcamper saying so.
 
 > **Required stops:** These steps are NEVER skipped, even when the SDK is already installed:
 >
-> - **Step 3's environment script** (`src/../bootcamp-onboarding/scripts/senzing-env.sh`, or `senzing-env.bat` on Windows):
+> - **Step 3's environment script** (`src/scripts/senzing-env.sh`, or `senzing-env.bat` on Windows):
 >   ⛔ **the single most likely thing an existing install is missing.** Step 3 is titled "Install
 >   Senzing SDK" and does **two** jobs — it installs the SDK *and* it writes the project-local script
 >   that exports the library and Python paths. Only the first is redundant here. Skipping both leaves
@@ -443,12 +443,18 @@ For the `docker` path (Intel Mac, Python on macOS/Windows, or Windows without Sc
   give it a stable `--name` and append an entry to a `docker_containers` list in
   `config/bootcamp_progress.json` — at least its `name` and the `runtime` you actually used
   (`docker`, `podman`, or `container` for Apple's `container` CLI); also `image` and `purpose`
-  when handy. **Record the runtime truthfully**: the hooks stop and report each container with
-  the CLI named there, so a wrong value means a container is reported under a tool that never
-  started it. An entry with no `runtime` is treated as `docker`. The `SessionEnd` hook stops
-  recorded containers on exit (`<runtime> stop`, not remove) and `SessionStart` surfaces them on
-  resume so they can be restarted or regenerated. (The list key stays `docker_containers` for
-  compatibility with in-flight bootcamps, whatever runtime its entries name.)
+  when handy. **Record the runtime truthfully**: each container is stopped and reported with the
+  CLI named there, so a wrong value means a container is reported under a tool that never
+  started it. An entry with no `runtime` is treated as `docker`.
+
+  ⛔ **Nothing stops these containers for you. Kiro has no session-end trigger, so stopping
+  them at session close-out is yours to do** (`<runtime> stop`, **never** remove — INV-101).
+  Do it whenever the bootcamper says they are stopping, when a module closes, and before any
+  long pause. On a new session the `senzing-bootcamp-session-start` hook surfaces the recorded
+  containers so they can be restarted or regenerated, when the optional enforcement hooks are
+  installed; without them, read `docker_containers` yourself at resume. (The list key stays
+  `docker_containers` for compatibility with in-flight bootcamps, whatever runtime its entries
+  name.)
 
 **Phase 2: EULA acceptance (requires bootcamper input):**
 
@@ -473,7 +479,7 @@ Once the bootcamper responds, act on their answer:
    (Maven/Gradle), C# (NuGet) and TypeScript, and NOT from a package manager at all for Python.**
 
    ⛔ **Python: there is nothing to install here, and `pip install senzing` is an error-severity
-   anti-pattern.** (INV-222 — INV-066's pip rules govern the plugin's own tooling only.) The `senzing` and `senzing_core` packages **ship inside `senzingsdk-runtime`**,
+   anti-pattern.** (INV-222 — INV-066's pip rules govern the Power's own tooling only.) The `senzing` and `senzing_core` packages **ship inside `senzingsdk-runtime`**,
    which the earlier phase already installed, so Python's Step 3 work is to make them importable —
    not to fetch them. Take the paths from the server, never from this file (INV-080):
    `sdk_guide(topic='install', platform='<platform>', language='python')` returns them in
@@ -493,7 +499,7 @@ Once the bootcamper responds, act on their answer:
    initialization failing with `libSz.so: cannot open shared object file`, which reads as an
    environment fault rather than as the install instruction that caused it. It is also a **version
    skew**: this module's version check reads the *engine's* version through the native library, so
-   it reports a current install while the bindings actually imported are older. The plugin's own
+   it reports a current install while the bindings actually imported are older. The Power's own
    shipped example recap records this happening on a real run
    (`../../docs/examples/bootcamp_recap.example.md`).
 
@@ -516,9 +522,9 @@ Once the bootcamper responds, act on their answer:
    community-supported) or Docker/WSL2, which this module's platform routing already covers.
 
    For **Java, C# and TypeScript**, use that ecosystem's package manager as normal. ⚠️ The
-   bare-`pip` prohibition still applies to the plugin's **own** tooling installs (`fpdf2`,
+   bare-`pip` prohibition still applies to the Power's **own** tooling installs (`fpdf2`,
    Playwright — INV-066): always an explicit `python3 -m pip`, never a bare `pip`, and PEP 668
-   handled with a project-local virtualenv. That rule is about *how* to run pip for the plugin's
+   handled with a project-local virtualenv. That rule is about *how* to run pip for the Power's
    helpers; it never authorizes pip for the Senzing SDK, which is not a pip package at all.
 
 **TypeScript/Node.js warning:** The TypeScript SDK (`sz-napi`) may require building from source
@@ -558,9 +564,8 @@ signal does not match any known cause, say so plainly ("this is an unrecognized 
 and still continue to the options: an unrecognized failure is never a dead end.
 
 **3. Known-cause table.** Match the failure signal to one cause. The detailed per-cause fixes
-live in a TypeScript "Common Environment Issues" reference (`lang-typescript.md`) that is a
-later porting phase; until then, source the fixes from the Senzing MCP server (see item 5) and
-the inline pointers here.
+are not bundled as a separate TypeScript reference; source them from the Senzing MCP server
+(see item 5) and the inline pointers here.
 
 | Cause | Failure signal | Fix reference ("Common Environment Issues") |
 |---|---|---|
@@ -582,8 +587,8 @@ the inline pointers here.
 **5. Sourcing (no hardcoded URLs).** For the detailed fix steps, use the Senzing MCP server:
 `sdk_guide(topic='install', platform='<user_platform>', language='typescript')` and
 `search_docs(category='anti_patterns')`. Never paste external URLs into this recovery flow; all
-external/toolchain knowledge comes from the MCP tools (and, once ported, the `lang-typescript.md`
-reference). If an MCP tool is unavailable, the fallback path still applies, so guidance degrades
+external/toolchain knowledge comes from the MCP tools. If an MCP tool is unavailable, the
+fallback path still applies, so guidance degrades
 gracefully rather than dead-ending.
 
 **6. Resume or continue Module 2.** Neither continuation requires deep toolchain debugging:
@@ -604,7 +609,7 @@ tried). This terminal state names the blocker and the next step rather than loop
 
 **🚨 NEVER modify the user's global shell configuration** (`~/.zshrc`, `~/.bashrc`,
 `~/.profile`, PowerShell `$PROFILE`, etc.) to set Senzing environment variables — **INV-199**.
-Instead, create a project-local environment script at `src/../bootcamp-onboarding/scripts/senzing-env.sh` (or the
+Instead, create a project-local environment script at `src/scripts/senzing-env.sh` (or the
 platform equivalent for Windows) that sets `SENZING_ROOT`, library paths, and any other
 Senzing-specific variables. Source this script before running bootcamp tasks. This keeps the
 bootcamp self-contained and avoids side effects on the user's system.
@@ -934,10 +939,10 @@ here."
 ## Step 6: Create Project Directory Structure
 
 Create the organized project layout that all subsequent modules use, following the file
-placement layout in `../bootcamp-onboarding/ground-rules.md` (`src/`, `src/../bootcamp-onboarding/scripts/`, `data/`,
+placement layout in `../bootcamp-onboarding/ground-rules.md` (`src/`, `src/scripts/`, `data/`,
 `database/`, `docs/`, `config/`, `licenses/`, `src/resources/`, `data/mapping/`, `data/temp/`).
-(The full Kiro agent-instructions directory-creation script is a later porting phase; create
-the layout directly per the ground-rules placement rules for now.)
+(There is no directory-creation script; create the layout directly per the ground-rules
+placement rules.)
 
 After creation, inform the user: "I've set up the project directory structure. All files will
 be organized properly throughout the bootcamp."
@@ -1057,8 +1062,8 @@ the engine config with `sdk_guide(topic='configure', ...)` — never hand-constr
 
 2. Record the container for lifecycle tracking (INV-101): append it to `docker_containers` in
    `config/bootcamp_progress.json` — at least its `name` and the `runtime` you actually used
-   (`docker`, or `podman` / `container` if that is what started it) — so the SessionEnd hook
-   stops it on exit and SessionStart offers to restart it.
+   (`docker`, or `podman` / `container` if that is what started it) — so you can stop it at
+   session close-out and offer to restart it on resume.
 3. Wait until the server is ready (poll `docker exec bootcamp-postgres pg_isready`).
 4. Apply the Senzing PostgreSQL schema DDL **before any SDK use** — the SDK does NOT auto-create it
    (unlike SQLite). MCP confirms the DDL ships with the SDK install at
@@ -1433,7 +1438,7 @@ call succeeds** (not merely a version query).
   is no code to explain, and hunting through the engine config wastes the time. **First check whether
   the script exists at all** — on the existing-install path it is the artifact most likely to be
   missing, and asking whether an absent file was sourced sends the reader looking for the wrong
-  fault. If `src/../bootcamp-onboarding/scripts/senzing-env.sh` (or `senzing-env.bat`) is not there, that **is** the
+  fault. If `src/scripts/senzing-env.sh` (or `senzing-env.bat`) is not there, that **is** the
   finding: write it now per Step 3's environment-script work, with the values from
   `sdk_guide(topic='install', platform=…, language=…)`. Only if it does exist, check that it was
   **sourced** (not executed) in this shell, and that it resolved its own path
@@ -1441,11 +1446,11 @@ call succeeds** (not merely a version query).
   zsh, a `${BASH_SOURCE[0]}`-based script computes the wrong root and exports nothing.
   (Snippet guard verified via `search_docs`; MCP server 1.32.1, 2026-07-28.)
 - Platform not supported? Use `search_docs` for alternative installation methods.
-- Database errors? Confirm path requirements against the file placement rules in ground-rules
-  (the Kiro `FILE_STORAGE_POLICY.md` reference is a later porting phase).
+- Database errors? Confirm path requirements against the file placement rules in
+  `../bootcamp-onboarding/ground-rules.md`, which is the only file-placement authority here.
 - Permission issues? Ensure you have admin/sudo access for installation.
-- Missing dependencies? A Kiro preflight script (`preflight.py`) is a later porting phase; for
-  now, verify prerequisites directly and use `search_docs` for platform requirements.
+- Missing dependencies? There is no preflight script; verify prerequisites directly and use
+  `search_docs` for platform requirements.
 
 ## Module completion and transition
 

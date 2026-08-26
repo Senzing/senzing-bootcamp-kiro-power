@@ -91,9 +91,9 @@ Truth Set DATA.
 
 - **Sanctioned source:** reference it only by its registry identifier `senzing_truthset_demo`,
   declared in `config/fallback_sources.yaml`. Never embed a raw URL. The registry is the single
-  reviewed place this source is defined. (The `config/fallback_sources.yaml` registry and its fetch
-  script are a later porting phase; for now, if the registry file is absent, treat the fallback as
-  unavailable and run the graceful-degradation path in `phase1-visualization.md`, Step 1, 1.1.)
+  reviewed place this source is defined. (No registry file and no fetch script are bundled, so if
+  `config/fallback_sources.yaml` is absent, treat the fallback as unavailable and run the
+  graceful-degradation path in `phase1-visualization.md`, Step 1, 1.1.)
 - **Approval rationale:** the workspace normally allows only `mcp.senzing.com` as an external
   endpoint. This exception exists because the source is the official Senzing-published deterministic
   data with a ground-truth key, needed to preserve a deterministic "wow moment" when the MCP Truth Set

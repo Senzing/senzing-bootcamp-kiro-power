@@ -109,7 +109,7 @@ steering files.)
   from. If you cannot point to the step in a skill file that specifies a question, it is not a
   bootcamp question and must not be asked. In particular, **never present a session- or host-level
   control as a bootcamp question** — auto mode, auto-accept edits, permission mode, plan mode, fast
-  mode, background tasks, `/compact`, `/loop`. Those belong to the bootcamper's Kiro session, not
+  mode, background tasks, `/compact`, `/goal`. Those belong to the bootcamper's Kiro session, not
   to the bootcamp, and asking about one is not made legitimate by the host surfacing that control
   alongside the bootcamp. **The single exception is the module-start model/effort switch** (see
   "Module start banners and transitions"), which is the only Kiro-surface control the bootcamp
@@ -173,16 +173,16 @@ steering files.)
 - **Pre-response checklist:** if your response contains Senzing SDK method names, attribute
   names, config options, error codes, or entity-resolution technical details, you MUST have
   called an MCP tool this turn to get them. If not, stop and call it first.
-- ⛔ **Two rules, two names, and they are not the same rule.** Both appear throughout the plugin,
+- ⛔ **Two rules, two names, and they are not the same rule.** Both appear throughout the Power,
   and left undefined they read as one requirement stated inconsistently — so a guide cannot tell
   whether a result fetched earlier may be presented now. Use these terms:
   - **Presentation freshness — "this turn".** The pre-response checklist above, unchanged: a reply
     that contains a Senzing specific requires an MCP call **on the turn that reply is sent**. This
-    is what makes the turn's attribution line truthful — the plugin may credit the MCP server only
+    is what makes the turn's attribution line truthful — the Power may credit the MCP server only
     for what a tool actually produced this turn (see "Attribution" below), so a turn with no call
     has nothing to attribute and must not present Senzing specifics at all.
   - **Sourcing floor — "from the server, not from this file".** Wherever a step says a value must
-    come from an MCP tool rather than from the literal written in the plugin file, it is setting a
+    come from an MCP tool rather than from the literal written in the Power file, it is setting a
     **floor on provenance**, not a ceiling on caching: the shipped number may be stale, so go ask.
   ⛔ **A sourcing floor never relaxes presentation freshness.** Satisfying the floor once does not
   license presenting the value on a later turn without a call; the floor says *where the value comes
@@ -383,7 +383,7 @@ steering files.)
 - Project root whitelist ONLY: `.gitignore`, `.env`, `.env.example`, `README.md`,
   `requirements.txt`, `pom.xml`, `*.csproj`, `Cargo.toml`, `package.json`. Never put `.py`,
   `.md` (except README), `.jsonl`, `.csv`, or non-config `.json` in the root.
-- The plugin's PreToolUse write-gate enforces the temp-path and secret rules; file-type
+- The Power's PreToolUse write-gate enforces the temp-path and secret rules; file-type
   placement is your responsibility.
 - ⛔ **On Java, a prescribed `snake_case` filename collides with the class name — declare the class
   package-private rather than renaming either (INV-237).** Every `.[ext]` filename in this bootcamp
@@ -531,7 +531,7 @@ which interface. The bootcamp runs in more than one, and the names are not inter
   snapshot, the recap PDF, the data-discoveries PDF, Data Quality, Mapping, and Transformation's
   quality/mapping web pages, and any future charts/dashboards/HTML — **MUST** take its palette and
   typography from the **shared brand tokens** shipped at
-  `../../scripts/brand_tokens.py` (colors, typography, data-source node colors), never an ad hoc
+  `scripts/brand_tokens.py` (colors, typography, data-source node colors), never an ad hoc
   palette, and **MUST** render offline (INV-081). This is a MUST, not a preference: the carve-out
   below is about *which artifacts* are bootcamper-facing, never about whether a bootcamper-facing
   one may skip the tokens. The shipped reference generators (`senzing_viz_server.py`, `generate_recap_pdf.py`)
@@ -557,8 +557,8 @@ which interface. The bootcamp runs in more than one, and the names are not inter
 
 - Progress -> `config/bootcamp_progress.json`. Preferences -> `config/bootcamp_preferences.yaml`.
 - **Batch administrative writes and keep them small (INV-012).** Every Write/Edit renders its diff
-  inline to the bootcamper, and no harness setting suppresses that today (see
-  `../../hooks/README.md`), so the only lever is to write **rarely** and **small**. Therefore:
+  inline to the bootcamper, and no Kiro setting suppresses that today, so the only lever is to
+  write **rarely** and **small**. Therefore:
   update config at **step and module boundaries, not on every sub-step**; batch related fields into
   a **single** write instead of one write per field; prefer a **minimal edit** of the changed key
   over a full-file rewrite; and keep the config files small. Administrative writes are not narrated
@@ -584,15 +584,16 @@ which interface. The bootcamp runs in more than one, and the names are not inter
   accumulating Information Shared / Questions & Responses / Actions Taken / End-of-Module Summary-so-far, wrapped
   in `<!-- RECAP-CHECKPOINT:START -->` … `<!-- RECAP-CHECKPOINT:END -->` markers. This is what
   survives a quit, compaction, or new session mid-module: it is folded into
-  `docs/bootcamp_recap.md` (append-only, idempotent). **Kiro provides no `PreCompact` and no
-  `SessionEnd` trigger, so folding is yours to do** — at module completion, at graduation, at
-  session close-out, and whenever you are given any signal that the conversation is about to be
-  compacted or trimmed. The `senzing-bootcamp-session-start` hook does it mechanically on a new
-  session when the enforcement hooks are installed, which backs the rule and never replaces it.
-  See `senzing-bootcamp-tier1-recap-folding.md` for the full rule. It is a
+  `docs/bootcamp_recap.md` (append-only, idempotent). **Nothing folds it for you — that is yours
+  to do** — at module completion, at graduation, at session close-out, and whenever you are given
+  any signal that the conversation is about to be compacted or trimmed. Kiro fires no trigger at
+  compaction and none at session end, so there is no hook to fall back on; the
+  `senzing-bootcamp-session-start` hook folds on a *new* session when the optional enforcement
+  hooks are installed, which backs the rule and never replaces it. See
+  `senzing-bootcamp-tier1-recap-folding.md` for the full rule. It is a
   single small file updated at step boundaries (INV-012), not per sub-step, and it is finalized and
   cleared on module completion (see `module-completion.md`).
-  **The plugin creates the file; you write what is in it.** `checkpoint-tick.py`
+  **The Power creates the file; you write what is in it.** `checkpoint-tick.py`
   (`UserPromptSubmit`) lays down an empty scaffold within a turn of the bootcamp starting, so the
   path always exists and you never have to create it — but a scaffold holds no narrative, and the
   fold hooks skip it and say so on stderr. An unfilled checkpoint is therefore the same loss as a
@@ -668,7 +669,7 @@ the 👉 protocol above).
   **BOOTCAMP FEEDBACK** entry banner and closes with a pinned **FEEDBACK SAVED — BACK TO THE
   BOOTCAMP** exit banner (a statement) before the pending 👉 question resumes, so feedback mode is
   visually distinct from the bootcamp. Then return them to exactly where they left off. Feedback
-  is saved locally only, never submitted externally unless they explicitly ask. (The plugin's
+  is saved locally only, never submitted externally unless they explicitly ask. (The Power's
   `UserPromptSubmit` hook surfaces this automatically during a bootcamp.)
 - **Change verbosity:** whenever they ask for more or less detail, update the `verbosity` key in
   `config/bootcamp_preferences.yaml`, confirm the new setting in one sentence, and continue.
@@ -676,7 +677,7 @@ the 👉 protocol above).
   was the question"), re-present the current pending 👉 question verbatim. Do not invent a new
   one, and do not advance.
 - **A host control the bootcamper raises — in any form:** whether they **ask about** auto mode,
-  auto-accept edits, permission mode, plan mode, fast mode, background tasks, `/compact`, `/loop` or
+  auto-accept edits, permission mode, plan mode, fast mode, background tasks, `/compact`, `/goal` or
   any other setting belonging to their Kiro session rather than to the bootcamp, **or tell you
   that a prompt for one appeared over the bootcamp**, answer in **one sentence** — it is their
   session setting, the bootcamp neither needs nor recommends a value — and then re-present the
@@ -749,7 +750,7 @@ the 👉 protocol above).
   ⛔ **This is the ONLY Kiro-surface control the bootcamp asks the bootcamper to operate
   (INV-247).** It is an exception, not a precedent: no other session- or host-level setting — auto
   mode, auto-accept edits, permission mode, plan mode, fast mode, background tasks, `/compact`,
-  `/loop` — is ever offered as a bootcamp question, and a new nudge in that shape must not be added
+  `/goal` — is ever offered as a bootcamp question, and a new nudge in that shape must not be added
   here or anywhere else. Read the closed-question-set rule in the 👉 protocol before adding one. This
   limit is stated here because *this* section is what creates the expectation: a bootcamper who has
   just been asked to set `/model` and `/effort` for this module has no way to tell an unsanctioned
@@ -859,7 +860,7 @@ the 👉 protocol above).
     > 👉 **Would you like to switch to {Model} at {effort} reasoning effort for this module?** (Recommended for best value; set it with the model and effort controls in {Kiro | Kiro on the web | the Kiro IDE}; reply no to keep your current {dial}.)
 
     Substitute the one interface the bootcamper is actually on. When the interface cannot be
-    determined, say "in your Kiro surface" — vague only where the plugin genuinely does not
+    determined, say "in your Kiro surface" — vague only where the Power genuinely does not
     know, never as a shorthand for an interface it does know (INV-158).
 
     ⛔ **When the recommendation sits *below* the current setting, say so in the question itself.**
@@ -1000,5 +1001,5 @@ the 👉 protocol above).
 
 ## Closing questions
 
-- YOU own the closing 👉 question at the end of each yielding turn. The plugin's `Stop` hook is
+- YOU own the closing 👉 question at the end of each yielding turn. The Power's `Stop` hook is
   a safety net that fires only if you forget - do not rely on it.

@@ -163,7 +163,7 @@ Only then display the one-line confirmation: `Recap updated: {Name}.`
 ### 2d. Finalize the in-progress checkpoint
 
 During the module you kept an in-progress recap at `docs/progress/recap_checkpoint.md`
-(see `ground-rules.md` → "Progress and state"), and the plugin's durability hooks may
+(see `ground-rules.md` → "Progress and state"), and the Power's durability hooks may
 have folded it into `docs/bootcamp_recap.md` as a `<!-- RECAP-CHECKPOINT:START -->` …
 `<!-- RECAP-CHECKPOINT:END -->` block. Now that the finalized `## {Name}` section is
 appended (2b), that block is superseded. Do two things:
@@ -225,7 +225,7 @@ a short `{name}`):
    ```
 
    Resolve `<helper>` as `${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/capture_screenshots.py` (command/hook
-   context) or `../../scripts/capture_screenshots.py` relative to a module skill. It tries several
+   context) or `../bootcamp-onboarding/scripts/capture_screenshots.py` relative to a module skill. It tries several
    headless backends (Playwright, Selenium, headless Chrome/Chromium, `wkhtmltoimage`) and never
    fetches a remote URL (offline — INV-091). Pass only tabs the app actually shows for this data —
    the helper reports any tab that produced no image on stderr rather than dropping it silently.

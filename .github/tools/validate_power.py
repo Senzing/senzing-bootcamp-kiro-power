@@ -66,6 +66,7 @@ PATH_REFERENCE_IGNORED_SUFFIXES = ("/",)
 # instruction (a wrong environment variable, a wrong filename) or a build note
 # that was never meant to ship.
 RESIDUAL_PATTERNS = (
+    # Names the upstream artifact, or a client this Power does not run in.
     ("CLAUDE_PLUGIN_ROOT", "wrong environment variable; Kiro provides PLUGIN_ROOT"),
     (".claude-plugin", "upstream manifest directory; the Power keeps plugin.json at its root"),
     ("Claude plugin", "names the upstream artifact rather than this Power"),
@@ -74,6 +75,25 @@ RESIDUAL_PATTERNS = (
     ("claude.ai", "upstream client URL"),
     ("code.claude.com", "upstream client documentation"),
     ("$CLAUDE_EFFORT", "upstream hook environment variable"),
+    # Hook triggers and skill frontmatter keys Kiro does not have. Content that
+    # asserts one of these fires, or tells a maintainer to set one, is telling the
+    # guide to rely on something that will never happen. The Tier 1 instruction
+    # files are exempt below: naming the missing trigger is their whole purpose.
+    ("PreCompact", "Kiro has no PreCompact trigger"),
+    ("SessionEnd", "Kiro has no SessionEnd trigger"),
+    ("context: fork", "not a Kiro skill frontmatter key"),
+    ("`/loop`", "not a Kiro slash command"),
+    # Upstream files the contract deliberately does not port, so a reference to one
+    # is a dangling link.
+    ("hooks/hooks.json", "upstream hook registration; not ported"),
+    ("hooks/README.md", "upstream hook documentation; not ported"),
+    (".mcp.json", "the Agent Plugins filename is mcp.json, without the leading dot"),
+    # Development-status language from the port. It never belonged in shipped
+    # bootcamp content: a bootcamper cannot act on "a later porting phase", and the
+    # sentence always had a real instruction next to it that should stand alone.
+    ("porting phase", "port-status language; state what the Power does or does not ship"),
+    ("later phase", "port-status language; state what the Power does or does not ship"),
+    ("once ported", "port-status language; state what the Power does or does not ship"),
 )
 
 # Files permitted to name the upstream plugin, with the reason each is exempt.
@@ -85,6 +105,25 @@ RESIDUAL_ALLOWLIST = {
     "dev.kiro/hooks/hook-parity-coverage.json": "build-provenance record; describes what was replaced",
     "skills/bootcamp-onboarding/assets/kiro-hooks/hook-parity-coverage.json": "build-provenance record; describes what was replaced",
 }
+
+# Files permitted to name a trigger Kiro does not have, because documenting that gap
+# is what they are for. Each Tier 1 instruction file exists precisely because the
+# template enforced a behavior with a trigger Kiro lacks, and each says so in order
+# to explain why the behavior is an instruction here instead of a hook. The two
+# scripts are inert in Kiro and carry a header saying exactly that.
+MISSING_TRIGGER_ALLOWLIST = {
+    "senzing-bootcamp-tier1-recap-folding.md": "Tier 1 carrier for the PreCompact gap",
+    "senzing-bootcamp-tier1-session-lifecycle.md": "Tier 1 carrier for the SessionEnd gap",
+    "senzing-bootcamp-tier1-ground-rules.md": "Tier 1 carrier for the SessionEnd gap",
+    "bootcamp-enforcement-setup/SKILL.md": "states which triggers Kiro lacks, as disclosure",
+    "precompact-recap.py": "inert script; its header states Kiro has no such trigger",
+    "session-end.py": "inert script; its header states Kiro has no such trigger",
+    "recap_checkpoint.py": "names its importers, including the two inert scripts",
+    "docker_lifecycle.py": "names its importers, including the two inert scripts",
+    "optional_runtime.py": "names its importers, including the two inert scripts",
+}
+
+MISSING_TRIGGER_NEEDLES = {"PreCompact", "SessionEnd"}
 
 FRONTMATTER_NAME = re.compile(r"^name:\s*[\"']?([^\"'\n]+?)[\"']?\s*$", re.MULTILINE)
 
@@ -393,11 +432,21 @@ def check_residual_upstream(root: Path) -> Check:
             check.warnings.append(f"{key}: exempt — {RESIDUAL_ALLOWLIST[key]}")
             continue
 
+        trigger_exempt = next(
+            (why for suffix, why in MISSING_TRIGGER_ALLOWLIST.items() if key.endswith(suffix)),
+            None,
+        )
+        if trigger_exempt:
+            check.warnings.append(f"{key}: may name a missing trigger — {trigger_exempt}")
+
         check.examined += 1
         for line_number, line in enumerate(read_text(root / relative).splitlines(), start=1):
             for needle, why in RESIDUAL_PATTERNS:
-                if needle in line:
-                    check.findings.append(f"{key}:{line_number}: {needle!r} — {why}")
+                if needle not in line:
+                    continue
+                if trigger_exempt and needle in MISSING_TRIGGER_NEEDLES:
+                    continue
+                check.findings.append(f"{key}:{line_number}: {needle!r} — {why}")
 
     return check
 

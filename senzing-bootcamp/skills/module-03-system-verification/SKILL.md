@@ -62,9 +62,8 @@ other seven are unambiguous. A results mismatch that the engine coherently expla
 as the bootcamper's system failing. Step 7 in `phase1-verification.md` states the procedure for
 telling the two apart.
 
-> **User reference:** detailed background on this module lives in the walkthrough above; a
-> standalone `docs/modules/MODULE_3_SYSTEM_VERIFICATION.md` reference is a later porting phase and
-> is not created yet.
+> **User reference:** detailed background on this module lives in the walkthrough above. There
+> is no standalone module reference document, and none is created.
 
 ## Error handling
 
@@ -74,8 +73,8 @@ When the bootcamper hits an error during this module:
    `explain_error_code(error_code="<code>", version="current")` and include the explanation in
    the Fix_Instruction.
 2. **Known pitfalls** (database lock contention, missing language
-   toolchains, MCP proxy connectivity): the full `common-pitfalls` reference is a later porting
-   phase; for now use `search_docs` to look up the symptom.
+   toolchains, MCP proxy connectivity): there is no bundled `common-pitfalls` reference, so use
+   `search_docs` to look up the symptom.
 3. **Cross-module resources:** SDK install/config issues -> Module 2 remediation; MCP issues ->
    connectivity troubleshooting; language toolchains -> platform-specific SDK guide via
    `sdk_guide`.

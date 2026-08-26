@@ -141,7 +141,6 @@ It reports, and fails on:
 1. Every `${PLUGIN_ROOT}/…` path referenced by the shipped content resolves to a
    file that exists.
 1. Every shipped Python script compiles.
-1. No residual reference to the upstream Claude plugin survives in shipped content.
 
 Add `--json` for the same answer as data.
 

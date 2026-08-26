@@ -256,7 +256,7 @@ def _split_title_date(rest: str) -> Tuple[str, str]:
       graduation to backfill a section that is already there (INV-157 warns against
       exactly that).
 
-    Recognizing the marker the plugin itself produces is narrower, and safer, than
+    Recognizing the marker the Power itself produces is narrower, and safer, than
     loosening the date test.
     """
     for sep in (" — ", " – ", " - "):
@@ -1157,7 +1157,7 @@ _UNICODE_MAP = {
     "⚠": "!",
     "\ufe0f": "",  # variation selector-16, trails emoji like the warning sign
     # Comparison, currency and spacing characters a bootcamper's own
-    # discoveries document carries but the plugin's templates never emit — so
+    # discoveries document carries but the Power's templates never emit — so
     # scanning the templates could not find them. Each rendered as "?" until mapped.
     "≈": "~",
     "≤": "<=",
@@ -1875,7 +1875,7 @@ def recap_certificate_name_unprintable(recap: Recap) -> Tuple[str, List[str]]:
 # Certificate of Completion (INV-100) — layout
 # --------------------------------------------------------------------------- #
 # Scaled from the Senzing certificate template, `resources/certificate-of-completion.pdf`
-# (a maintainer asset, not shipped with the plugin — like the style reference behind
+# (a maintainer asset, not shipped with the Power — like the style reference behind
 # brand_tokens): a warm ember gradient band down the left edge, a white card bordered by
 # an ember rule, then the Senzing wordmark, an eyebrow, the headline, the recipient, the
 # citation, and a date / issuer signature row flanking an award seal.

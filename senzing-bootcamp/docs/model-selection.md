@@ -1,24 +1,26 @@
 # Model & effort selection (maintainer notes)
 
 This is a maintainer/developer reference — it does not ship as bootcamper-facing
-content. It records which Power components can carry a model/effort override,
-the scope of those overrides, and a best-value model evaluation for each skill,
-so the analysis is not re-investigated.
+content. It records which Power components can carry a model/effort setting, the
+scope of those settings, and a best-value model evaluation for each skill, so the
+analysis is not re-investigated.
 
-**The headline:** a skill's `model:`/`effort:` override is **turn-scoped**, so
-for this interactive, multi-turn Power the **session** model/effort — not
-per-skill frontmatter — is the lever that actually governs the experience.
+**The headline:** in Kiro there is no per-skill model or effort override at all,
+so the **session** model/effort is not merely the more reliable lever — it is the
+only one. Everything the bootcamp does about model selection is therefore a
+recommendation the bootcamper acts on, never a setting the Power applies.
 
-## Which components can carry a model/effort override
+## Which components can carry a model/effort setting
 
-A model/effort override only means anything for components that actually invoke
+A model/effort setting only means anything for components that actually invoke
 the model. `type: command` hooks and the scripts they run are deterministic
 programs and never "run under a model."
 
 | Component | Model? | Effort? | How / scope |
 |---|:---:|:---:|---|
-| Skills (`SKILL.md` frontmatter) | ✅ | ✅ | `model:` + `effort:` (`low`/`medium`/`high`/`xhigh`/`max`). **Turn-scoped.** |
-| Sub-agents | ✅ | ✅ | `model:` (`inherit` default) + `effort:`; persists for the sub-agent's whole run |
+| Skills (`SKILL.md` frontmatter) | ❌ | ❌ | Kiro's supported frontmatter is `name`, `description`, `license`, `compatibility`, `metadata`. No model or effort key exists. |
+| The session | ✅ | ✅ | Model selector in the chat input bar, with the **Effort** panel inside it (`low`/`medium`/`high`/`xhigh`/`max`). On the Kiro CLI, `/model` and `/effort`. Persists for the conversation. |
+| Sub-agents (`.kiro/agents/`) | ✅ | ❌ | A `model` field in the agent config. There is no `effort` field; effort stays session-level. |
 | Command hooks (`type: command`) | ❌ | ❌ | Deterministic program; not model-executed |
 | Agent hooks (`type: agent`) | ➖ | ➖ | Appends a prompt to the current context; inherits the session model/effort |
 | Scripts (run by hooks) | ❌ | ❌ | Not model-executed |
@@ -28,28 +30,25 @@ commands: Kiro has no Power-level slash commands, so each of the three
 trigger phrases is a skill (`start-bootcamp`, `graduate-bootcamp`,
 `bootcamp-feedback`) rather than a command document.
 
-## Skill overrides are turn-scoped (the load-bearing constraint)
+## There is no per-skill override to reach for (the load-bearing constraint)
 
-From the Kiro skills documentation:
+⚠️ **This is the one place where this Power and the upstream template it was built
+from differ in kind, not just in wording.** The template could put `model:` and
+`effort:` in a skill's frontmatter — turn-scoped, and so nearly useless for an
+interactive multi-turn skill, but present. Kiro's skill frontmatter has no such
+key, so the question does not arise:
 
-> The override applies for the rest of the current turn and is not saved to
-> settings; the session model resumes on your next prompt.
-
-The bootcamp skills are **interactive and multi-turn** — every step ends by
-yielding to the bootcamper after one 👉 question, so each following step arrives
-as a *new user prompt* and the override **resets** to the session model/effort. A
-`model:` on a module skill therefore governs only the module-start turn, not the
-whole module.
-
-Consequences:
-
-- The reliable lever for the bootcamp is the **session** model/effort.
-- Per-skill `model:` frontmatter on an interactive skill gives a false sense of
-  cross-turn control — avoid it.
-- Sustained per-skill model control exists only via `context: fork` (the skill
-  runs in a subagent that holds its own `model:`/`effort:` for its whole run) —
-  but that moves the work into an isolated subagent, which is wrong for skills
-  that must converse with the bootcamper turn-by-turn.
+- Do not add `model:` or `effort:` to any `SKILL.md` in this Power. Kiro does not
+  read them, and an unrecognized key is a silent no-op, not an error — which is
+  the worst failure mode, because the file looks configured and is not.
+- The template's escape hatch for sustained per-skill control (running the skill
+  forked into a sub-agent that holds its own model) has no Kiro equivalent for a
+  skill, and would be wrong here anyway: the bootcamp skills must converse with
+  the bootcamper turn by turn, and a sub-agent's conversation is isolated.
+- So the only lever is the **session** model/effort, and only the bootcamper can
+  move it. That is exactly why the module-start nudge is a recommendation and a
+  question rather than a setting the Power applies — see "Module-start commands"
+  below. The guide never changes a dial itself.
 
 ## Model tiers (for "best value")
 
@@ -111,8 +110,8 @@ against the bootcamper's actual setting).
 
 `ground-rules.md` → "Module start banners and transitions" surfaces this per-stage recommendation
 at the start of each module (and `graduation/SKILL.md` at the graduation banner). Switching is
-optional; the session-level model/effort persists for the session (unlike per-skill frontmatter),
-and the guide never changes it — only the bootcamper can.
+optional; the session-level model/effort persists for the conversation, and the guide never
+changes it — only the bootcamper can, because there is no other lever.
 
 **How it is surfaced is not configurable** (INV-137). The bootcamper is never asked, there is no
 `model_guidance` preference, and the behavior depends only on whether the recommendation differs
@@ -193,33 +192,39 @@ value to compare against.
 
 ## Recommendation
 
-Because skill overrides reset per prompt, realize the evaluation through the
-**session** model — not per-skill frontmatter:
+There is no per-skill setting to realize the evaluation with, so it is realized
+through the **session** model and effort, which only the bootcamper can set:
 
 - **Value-optimized (the `README.md` default):** run the session on **Sonnet 5**,
   and switch the session up to **Opus 5** for the correctness-critical stretches —
   SDK setup, Truth Set visualization, and the whole back half from Data Quality,
   Mapping, and Transformation through graduation, which is flat at Opus 5 / high.
-  Switch mid-session with Opus 5 in the model picker and back with
-  Sonnet 5 in the model picker. **Haiku 4.5** is not recommended for any
-  bootcamper-facing skill (protocol risk); **Fable 5** is not the value pick here.
-- **Simplest (one model, no switching):** run the whole session on
-  **Opus 5 + `--effort high`**. Zero-friction — one strong model for everything
-  — at the cost of over-paying on the lighter conversational modules.
+  Switch mid-session by picking Opus 5 in the model selector and back with
+  Sonnet 5. **Haiku 4.5** is not recommended for any bootcamper-facing skill
+  (protocol risk); **Fable 5** is not the value pick here.
+- **Simplest (one model, no switching):** run the whole session on **Opus 5** at
+  **high** effort. Zero-friction — one strong model for everything — at the cost
+  of over-paying on the lighter conversational modules.
 
-## Optional lever: invoking-turn-only effort
+## Considered and rejected: a per-skill effort bump
 
-`effort:` frontmatter on the heaviest single-turn skills (`graduation`,
-`module-02-sdk-setup`, `module-05-data-quality-mapping`) will bump reasoning on
-the turn that *invokes* the skill, then reset like any skill override. It is a
-minor, honest tuning knob — if added, it must be understood (and labeled in the
-frontmatter's vicinity) as **invoking-turn-only**, not a module-wide setting. It
-is intentionally **not** wired today, to avoid implying persistence the mechanism
-does not provide.
+The template could raise reasoning effort for the turn that *invokes* a heavy
+skill (`graduation`, `module-02-sdk-setup`, `module-05-data-quality-mapping`) by
+putting `effort:` in that skill's frontmatter. It was never wired there, because
+turn-scoped effort implies a persistence the mechanism did not provide.
+
+In Kiro the option does not exist to reject: skill frontmatter has no `effort`
+key. This section is kept only so the idea is not re-proposed as though it were
+available.
 
 ## Sources
 
-- Skills model/effort scope: <https://kiro.dev/docs/skills/> (frontmatter reference).
+- Skill frontmatter (the supported field set): <https://kiro.dev/docs/skills/>.
 - Powers (component set, `plugin.json`, `mcp.json`): <https://kiro.dev/docs/powers/>.
-- Hooks: <https://kiro.dev/docs/hooks/>.
+- Hook triggers: <https://kiro.dev/docs/hooks/>.
+- Reasoning effort and the model selector: <https://kiro.dev/docs/models/effort/>.
+- Kiro CLI slash commands (`/model`, `/effort`, `/compact`):
+  <https://kiro.dev/docs/reference/slash-commands/>.
+- Sub-agent configuration (`model`, and the absence of `effort`):
+  <https://kiro.dev/docs/custom-agents/configuration-reference/>.
 - Model positioning/pricing: the model provider's current published pricing.
