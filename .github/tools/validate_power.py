@@ -218,6 +218,22 @@ def check_manifests(root: Path) -> Check:
                 f"but the vendored schema is {expected_schema_url!r}"
             )
 
+        # `extensions` is a legal Agent Plugins field, and this Power deliberately
+        # carries none. Everything it held was build provenance that nothing on the
+        # installed side reads: `templateRelease` and `contractVersion` are both
+        # recorded in `.build-manifest.json`, the template repository is a constant in
+        # the transformation contract rather than a per-build value, and the update
+        # path's version floor is the top-level `version`. A rebuild that reintroduces
+        # the block is shipping a second, unread copy of that provenance to every
+        # bootcamper, so it is reported here rather than passing quietly.
+        if document_name == "plugin.json" and "extensions" in document:
+            namespaces = sorted(document["extensions"]) or ["(empty)"]
+            check.findings.append(
+                "plugin.json: carries an 'extensions' block "
+                f"({', '.join(namespaces)}). This Power ships no client-specific "
+                "manifest data; build provenance belongs in .build-manifest.json"
+            )
+
         if jsonschema is None:
             continue
 

@@ -204,7 +204,7 @@
       "ruleId": "manifest",
       "owner": "template",
       "sourcePath": "plugins/senzing-bootcamp/.claude-plugin/plugin.json",
-      "sha256": "87914682debce40ef2f55da31aa0f7e7171cc0eb05e80f9802c57e5adb304364"
+      "sha256": "051b364e8288d02e89a2527347541fc14738d88165b46a1d93c534390afbd22e"
     },
     {
       "path": "skills/bootcamp-enforcement-setup/SKILL.md",

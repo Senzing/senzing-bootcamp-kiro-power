@@ -7,12 +7,5 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/Senzing/senzing-bootcamp-kiro-power",
   "repository": "https://github.com/Senzing/senzing-bootcamp-kiro-power",
-  "keywords": ["senzing", "entity-resolution", "bootcamp", "training", "onboarding", "data-quality"],
-  "extensions": {
-    "com.senzing.bootcamp": {
-      "templateRepository": "https://github.com/Senzing/senzing-bootcamp-claude-plugin",
-      "templateRelease": "0.5.1",
-      "contractVersion": 1
-    }
-  }
+  "keywords": ["senzing", "entity-resolution", "bootcamp", "training", "onboarding", "data-quality"]
 }

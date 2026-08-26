@@ -41,6 +41,18 @@ at a glance which template release a Power carries.
   like "a later porting phase". Every check is negative-tested: each one has been
   confirmed to fail on an injected regression, not just to pass on a clean tree.
 
+### Removed
+
+- The `extensions["com.senzing.bootcamp"]` block from `senzing-bootcamp/plugin.json`.
+  `extensions` is a legal Agent Plugins field, but nothing on the installed side read
+  this one: neither Kiro nor the Power itself, and the block was shipping build
+  provenance to every bootcamper twice over. All three values remain available where
+  they are actually used — `templateRelease` and `contractVersion` in
+  `senzing-bootcamp/.build-manifest.json`, and the template repository as a constant in
+  the transformation contract rather than a per-build value. The update path's version
+  floor was always the top-level `version`, which is unchanged. `Validate power` now
+  fails if the block reappears.
+
 ### Fixed
 
 Defects introduced when the Power was transformed from the Claude plugin, all of
