@@ -3,6 +3,7 @@
   "language": "en",
   "words": [
     "advisorily",
+    "agentic",
     "agnostically",
     "AKIA",
     "AQAAAD",
@@ -20,6 +21,7 @@
     "cand",
     "cands",
     "capturable",
+    "CCLA",
     "CEXCL",
     "checkpointed",
     "checkpointing",
@@ -87,6 +89,7 @@
     "HELV",
     "hyperscaler",
     "ICIJ",
+    "ICLA",
     "idempotently",
     "idset",
     "IHDR",
@@ -151,6 +154,7 @@
     "precompact",
     "prefs",
     "printability",
+    "psql",
     "pycache",
     "pymupdf",
     "PYTHONPATH",
@@ -234,8 +238,8 @@
     "Xlint",
     "XLITERATOR",
     "YREST",
-    "Łukasz",
-    "Владимир"
+    "\u0141ukasz",
+    "\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440"
   ],
   "ignorePaths": [
     ".git/**",

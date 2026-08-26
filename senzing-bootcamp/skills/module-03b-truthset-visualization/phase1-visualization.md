@@ -204,12 +204,12 @@ Whatever the language, the server MUST reproduce the reference's behavior:
 - Serve the live D3 v7 page as a **single consolidated, tabbed app** (all tabs in 2.4), and write a
   self-contained standalone HTML snapshot.
 - **Render offline (INV-091):** inline the vendored D3 at
-  `${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/vendor/d3.v7.min.js` (skill-relative fallback:
+  `${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/vendor/d3.v7.min.js` (skill-relative fallback:
   `../../../bootcamp-onboarding/scripts/vendor/d3.v7.min.js`, INV-252) into both
   the live page and the standalone snapshot; never fetch from a CDN. (D3 runs in the browser, so
   this holds regardless of the server's language.)
 - **Use the Senzing brand (INV-081):** take the palette and typography from the shipped brand
-  tokens (`${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/brand_tokens.py`, skill-relative fallback
+  tokens (`${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/brand_tokens.py`, skill-relative fallback
   `../../../bootcamp-onboarding/scripts/brand_tokens.py` — INV-252; mirrored in `senzing_viz_server.py`). A non-Python server
   cannot import the Python module, so replicate the token **values** from the reference; never
   invent an ad-hoc palette. ⛔ **Assign data-source colors from the sources actually present in the
@@ -232,7 +232,7 @@ must be importable, so run everything with the project env sourced (the `src/../
 Read `programming_language` from `config/bootcamp_preferences.yaml`:
 
 - **Python** → the reference implementation *is* the server. Resolve `../bootcamp-onboarding/scripts/senzing_viz_server.py`
-  (`${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/senzing_viz_server.py` in a command/hook context, else
+  (`${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/senzing_viz_server.py` in a command/hook context, else
   `../../../bootcamp-onboarding/scripts/senzing_viz_server.py` relative to this skill) and run it directly. This is the
   **only** path on which `senzing_viz_server.py` runs.
 - **Any other language** → generate the server in that language per the contract above, modeled on

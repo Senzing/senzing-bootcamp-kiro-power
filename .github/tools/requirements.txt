@@ -1,0 +1,8 @@
+# Dependencies of .github/tools/validate_power.py.
+#
+# Only one, and it is optional: without jsonschema the validator still runs and
+# still fails the build on a malformed manifest, but check 1 degrades from full
+# Agent Plugins schema validation to a structural field check and says so.
+#
+# Pinned so a CI run is reproducible; dependabot proposes the bumps.
+jsonschema==4.26.0

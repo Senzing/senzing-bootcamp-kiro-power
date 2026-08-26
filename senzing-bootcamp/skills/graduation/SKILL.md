@@ -122,8 +122,8 @@ edge case. Three shapes, decided by the live setting rather than by the yes alon
 
 1. **The dial is not yet set** — preface the reply turn with a one-line statement telling the
    bootcamper how to make the change (run the `/model`/`/effort` commands in the Kiro CLI, or
-   use the model and reasoning-effort controls in Kiro / Kiro on the web / their Claude
-   IDE extension), then end the turn on this pinned confirmation gate (its question verbatim,
+   use the model and reasoning-effort controls in Kiro / Kiro on the web / the Kiro
+   IDE), then end the turn on this pinned confirmation gate (its question verbatim,
    INV-056/INV-069 — only the answer hint adapts) — do NOT start the graduation work yet:
 
    > 👉 **Are you done modifying the model and effort?** (Reply yes once you've set your model and effort; reply no if you need more time.)
@@ -547,8 +547,8 @@ During the bootcamp these files were written plain (see
 more importantly, enforces the content guard below in code:
 
 ```bash
-python3 "${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/normalize_docs_markdown.py"
-# or, if CLAUDE_PLUGIN_ROOT is unset: python3 <this-skill-dir>/../../../bootcamp-onboarding/scripts/normalize_docs_markdown.py
+python3 "${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/normalize_docs_markdown.py"
+# or, if PLUGIN_ROOT is unset: python3 <this-skill-dir>/../bootcamp-onboarding/scripts/normalize_docs_markdown.py
 ```
 
 It applies blank lines around headings (MD022), fenced blocks (MD031) and lists (MD032); a language
@@ -609,14 +609,14 @@ verifying the render, below. `poppler`'s `pdftoppm` is the tool to reach for; `p
 where it happens to be installed. Neither is required — but a check that does not run MUST be
 reported as skipped rather than degrading silently, per "Say what you could not verify" below.)
 
-Locate and run the bundled script (it ships with this plugin). Use the venv's Python
+Locate and run the bundled script (it ships with this Power). Use the venv's Python
 if you created one above; otherwise `python3`:
 
 ```bash
 # fpdf2 already importable, or using the stdlib fallback:
-python3 "${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/generate_recap_pdf.py"
+python3 "${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/generate_recap_pdf.py"
 # Or, when you installed fpdf2 into the project-local venv above:
-data/temp/recap-venv/bin/python "${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/generate_recap_pdf.py"
+data/temp/recap-venv/bin/python "${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/generate_recap_pdf.py"
 ```
 
 If `${PLUGIN_ROOT}` is not set in the current context, resolve the script
@@ -624,7 +624,7 @@ relative to this skill's directory instead (this skill lives at
 `skills/graduation/`, so the generator is two levels up under `../bootcamp-onboarding/scripts/`):
 
 ```bash
-python3 <this-skill-dir>/../../../bootcamp-onboarding/scripts/generate_recap_pdf.py
+python3 <this-skill-dir>/../bootcamp-onboarding/scripts/generate_recap_pdf.py
 ```
 
 The script reads `docs/bootcamp_recap.md` and writes `docs/bootcamp_recap.pdf`.
@@ -869,8 +869,8 @@ best-effort CommonMark pass over them that Step 1a made over `docs/*.md` — INV
 pass over **both** sets, and the `production/` half is why this step exists:
 
 ```bash
-python3 "${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/normalize_docs_markdown.py" --docs-dir production
-# or, if CLAUDE_PLUGIN_ROOT is unset: python3 <this-skill-dir>/../../../bootcamp-onboarding/scripts/normalize_docs_markdown.py --docs-dir production
+python3 "${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/normalize_docs_markdown.py" --docs-dir production
+# or, if PLUGIN_ROOT is unset: python3 <this-skill-dir>/../bootcamp-onboarding/scripts/normalize_docs_markdown.py --docs-dir production
 ```
 
 It applies the same rules as in Step 1a and globs top-level `production/*.md` only, never
@@ -906,11 +906,11 @@ Render each with the bundled general renderer, resolved the same way as every ot
 script and never as a bare `../bootcamp-onboarding/scripts/…` path (INV-185):
 
 ```bash
-python3 "${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/generate_document_pdf.py" \
+python3 "${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/generate_document_pdf.py" \
     --input docs/business_problem.md --output docs/business_problem.pdf \
     --require-sections "<this document's own H2 headings, semicolon-separated>" \
     --subtitle "The problem this bootcamp set out to solve"
-# or, if CLAUDE_PLUGIN_ROOT is unset: python3 <this-skill-dir>/../../../bootcamp-onboarding/scripts/generate_document_pdf.py …
+# or, if PLUGIN_ROOT is unset: python3 <this-skill-dir>/../bootcamp-onboarding/scripts/generate_document_pdf.py …
 ```
 
 ⛔ **Pass `--subtitle`.** The cover's subtitle defaults to the discoveries line, "What Senzing

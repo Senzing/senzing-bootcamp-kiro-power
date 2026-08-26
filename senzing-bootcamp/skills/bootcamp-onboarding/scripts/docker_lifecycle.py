@@ -50,7 +50,7 @@ KNOWN_RUNTIMES = {
 
 # Runtimes whose CLI implements docker's ``ps -a --filter ... --format ...``
 # interface, so a container's state can be read. Apple's ``container`` uses a
-# different list syntax that this plugin has not verified, so its state is reported
+# different list syntax that this Power has not verified, so its state is reported
 # as unknown rather than guessed at with a command that would merely fail.
 STATE_PROBE_RUNTIMES = ("docker", "podman")
 

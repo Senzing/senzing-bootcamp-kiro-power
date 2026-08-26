@@ -1,33 +1,36 @@
 # Model & effort selection (maintainer notes)
 
 This is a maintainer/developer reference — it does not ship as bootcamper-facing
-content. It records which plugin components can carry a model/effort override,
+content. It records which Power components can carry a model/effort override,
 the scope of those overrides, and a best-value model evaluation for each skill,
 so the analysis is not re-investigated.
 
 **The headline:** a skill's `model:`/`effort:` override is **turn-scoped**, so
-for this interactive, multi-turn plugin the **session** model/effort — not
+for this interactive, multi-turn Power the **session** model/effort — not
 per-skill frontmatter — is the lever that actually governs the experience.
 
 ## Which components can carry a model/effort override
 
 A model/effort override only means anything for components that actually invoke
-Claude. `type: command` hooks and the scripts they run are deterministic
+the model. `type: command` hooks and the scripts they run are deterministic
 programs and never "run under a model."
 
 | Component | Model? | Effort? | How / scope |
 |---|:---:|:---:|---|
 | Skills (`SKILL.md` frontmatter) | ✅ | ✅ | `model:` + `effort:` (`low`/`medium`/`high`/`xhigh`/`max`). **Turn-scoped.** |
-| Slash commands (`.md` frontmatter) | ✅ | ❌ | `model:`; no effort field |
-| Subagents (`agents/*.md`) | ✅ | ✅ | `model:` (`inherit` default) + `effort:`; persists for the subagent's whole run |
-| Command hooks (`type: command`) | ❌ | ❌ | Deterministic program; only reads session effort via `$CLAUDE_EFFORT` |
-| Prompt hooks (`type: prompt`) | ✅ | ❌ | `model:` in hook config |
-| Agent hooks (`type: agent`) | ➖ | ➖ | Inherits the spawned subagent's `model:`/`effort:` |
-| Scripts (run by hooks/commands) | ❌ | ❌ | Not model-executed |
+| Sub-agents | ✅ | ✅ | `model:` (`inherit` default) + `effort:`; persists for the sub-agent's whole run |
+| Command hooks (`type: command`) | ❌ | ❌ | Deterministic program; not model-executed |
+| Agent hooks (`type: agent`) | ➖ | ➖ | Appends a prompt to the current context; inherits the session model/effort |
+| Scripts (run by hooks) | ❌ | ❌ | Not model-executed |
+
+This Power ships skills, hook definitions, and scripts. It ships no slash
+commands: Kiro has no Power-level slash commands, so each of the three
+trigger phrases is a skill (`start-bootcamp`, `graduate-bootcamp`,
+`bootcamp-feedback`) rather than a command document.
 
 ## Skill overrides are turn-scoped (the load-bearing constraint)
 
-From the Kiro skills docs:
+From the Kiro skills documentation:
 
 > The override applies for the rest of the current turn and is not saved to
 > settings; the session model resumes on your next prompt.
@@ -61,16 +64,16 @@ the numbers — see the staleness note below):
 | Haiku 4.5 | Budget | ~$1 / ~$5 | **No** | Fastest; no adaptive thinking |
 
 > **Point-in-time data — re-verify before relying on it.** Model names, IDs, and
-> prices above are a snapshot, **last verified 2026-07-25** against current Claude
-> documentation. They go stale whenever a new model ships. Two known triggers:
+> prices above are a snapshot, **last verified 2026-07-25** against the model
+> provider's documentation. They go stale whenever a new model ships. Two known triggers:
 > Sonnet 5's listed rate is its standard price — an introductory rate applies
 > through 2026-08-31, so the effective cost is lower until then; and Opus 5 is
 > priced identically to the model it replaced (Opus 4.8, at the same ~$5 / ~$25),
 > which will not stay true across future releases. Re-verify names, IDs, and
-> pricing against current Claude documentation rather than trusting this table.
+> pricing against current provider documentation rather than trusting this table.
 
 For a protocol-heavy (⛔ gates, INV-056 pinned wording, one-👉-per-turn),
-MCP-first teaching plugin, Haiku's lack of adaptive thinking is a real risk of
+MCP-first teaching Power, Haiku's lack of adaptive thinking is a real risk of
 gate/format slips, and Fable's premium buys little the workloads here need.
 
 ## Per-skill best-value evaluation
@@ -155,7 +158,7 @@ The nudge adapts to the Kiro surface in use (INV-098): the **Recommended** colum
 interface-neutral; the **Where to set it in Kiro** column is the Kiro CLI equivalent. In Kiro,
 Kiro on the web, or the Kiro IDE, the same model and reasoning effort are set via that
 interface's model/effort controls rather than the slash commands. Each is named explicitly, because
-the retired "the Claude app" did not say which controls were meant (INV-158).
+the retired "the Kiro app" did not say which controls were meant (INV-158).
 
 **One row per stage, in the order the bootcamp runs them** — so the next stage's recommendation can
 be read off directly, and so no stage is ever missing a value to compare against. Each row names
@@ -216,7 +219,7 @@ does not provide.
 
 ## Sources
 
-- Skills model/effort scope: `code.claude.com/docs/en/skills.md` (frontmatter reference).
-- Subagents model/effort: `code.claude.com/docs/en/sub-agents.md`.
-- Hooks: `code.claude.com/docs/en/hooks.md`.
-- Model positioning/pricing: `platform.claude.com/docs/en/about-claude/models/overview`.
+- Skills model/effort scope: <https://kiro.dev/docs/skills/> (frontmatter reference).
+- Powers (component set, `plugin.json`, `mcp.json`): <https://kiro.dev/docs/powers/>.
+- Hooks: <https://kiro.dev/docs/hooks/>.
+- Model positioning/pricing: the model provider's current published pricing.

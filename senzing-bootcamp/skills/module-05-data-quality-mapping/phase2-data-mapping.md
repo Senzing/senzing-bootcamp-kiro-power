@@ -1046,9 +1046,9 @@ If yes, generate a self-contained HTML page and save it to
 
 ⛔ **Same four rules as the quality-assessment visual in `phase1-quality-assessment.md`** — this is a
 bootcamper-facing visual deliverable too, and the reasons are identical: brand tokens from
-`${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/brand_tokens.py` (INV-081; skill-relative fallback
+`${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/brand_tokens.py` (INV-081; skill-relative fallback
 `../../../bootcamp-onboarding/scripts/brand_tokens.py`, INV-252); **renders offline**, so no CDN or web font
-— inline the vendored `${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/vendor/d3.v7.min.js` (skill-relative fallback
+— inline the vendored `${PLUGIN_ROOT}/skills/bootcamp-onboarding/scripts/vendor/d3.v7.min.js` (skill-relative fallback
 `../../../bootcamp-onboarding/scripts/vendor/d3.v7.min.js`, INV-252) if a chart library is needed (INV-081/INV-091);
 every data-sourced string escaped for the context it lands in, including `<`/`>`/`&` as `\uXXXX`
 inside any inline `<script>` payload (INV-106); and verify the rendered page rather than the exit

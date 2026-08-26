@@ -109,7 +109,7 @@ steering files.)
   from. If you cannot point to the step in a skill file that specifies a question, it is not a
   bootcamp question and must not be asked. In particular, **never present a session- or host-level
   control as a bootcamp question** — auto mode, auto-accept edits, permission mode, plan mode, fast
-  mode, background tasks, `/compact`, `/loop`. Those belong to the bootcamper's Claude session, not
+  mode, background tasks, `/compact`, `/loop`. Those belong to the bootcamper's Kiro session, not
   to the bootcamp, and asking about one is not made legitimate by the host surfacing that control
   alongside the bootcamp. **The single exception is the module-start model/effort switch** (see
   "Module start banners and transitions"), which is the only Kiro-surface control the bootcamp
@@ -129,7 +129,7 @@ steering files.)
     host prompt *"Set up auto mode for your environment?"* — the harness's own dialog, offering
     "Set it up" / "Not now" / "Don't show again" — appeared during the onboarding preface with
     `👉 Do you have any questions before we get started?` pending and unanswered. **That prompt is
-    host-rendered: no file in this plugin asks it, and on both runs the guide originated nothing.**
+    host-rendered: no file in this Power asks it, and on both runs the guide originated nothing.**
     What it demonstrates is the hazard this rule exists for. It cost each run its pending question,
     and the bootcamper could not tell it from bootcamp content — arriving *before* any sanctioned
     interface question, so the frame they formed for every later one came from something the
@@ -270,7 +270,7 @@ steering files.)
 - **Response structures (INV-115).** Flags are only half the lookup. Before writing any code
   that **parses** an SDK response, call
   `get_sdk_reference(topic='response_schemas', filter='<method>')`. **Never infer field names
-  from an example snippet** — including the illustrative payloads in this plugin's own docs.
+  from an example snippet** — including the illustrative payloads in this Power's own docs.
   This matters more than flags do: a wrong flag usually yields a visible error, whereas a wrong
   field name yields `None`, which renders as blank text. The output then looks like "Senzing
   found nothing" instead of a defect, so nobody reports it.
@@ -504,24 +504,24 @@ it is spelled correctly wherever the module is named.
 
 ## Naming the Kiro surface (INV-158)
 
-Whenever output, a question, or a doc tells the bootcamper to do something **in their Claude
+Whenever output, a question, or a doc tells the bootcamper to do something **in their Kiro
 interface** — set a model, change reasoning effort, restart an MCP server, click a control — name
 which interface. The bootcamp runs in more than one, and the names are not interchangeable:
 
 | Say | For |
 | --- | --- |
-| **Kiro** | The desktop application (it runs Kiro inside itself). |
+| **Kiro** | The desktop application. |
 | **Kiro CLI** | Kiro in a terminal, where `/model` and `/effort` exist. |
-| **Kiro on the web** | Kiro at claude.ai/code. |
+| **Kiro on the web** | Kiro in a browser. |
 | **the Kiro IDE** | Kiro in VS Code or a JetBrains IDE. |
 
 - **"Kiro" alone names the product, never an interface.** It is correct for things that are
-  true of the harness everywhere — "the senzing MCP server configured in Kiro", "a Claude
-  Code plugin", "Kiro hooks" — and wrong as a way of saying *the terminal*, because Claude
-  Desktop is Kiro too.
-- **"The Claude app" is retired vocabulary.** It named none of the four interfaces, so a bootcamper
+  true of the harness everywhere — "the senzing MCP server configured in Kiro", "a Kiro
+  Power", "Kiro hooks" — and wrong as a way of saying *the terminal*, because the desktop
+  application is Kiro too.
+- **"The Kiro app" is retired vocabulary.** It named none of the four interfaces, so a bootcamper
   told to use those unnamed "model and effort controls" had to guess which. Name the interface.
-- **Vague is allowed only where the plugin genuinely cannot tell.** When the interface is
+- **Vague is allowed only where the Power genuinely cannot tell.** When the interface is
   undeterminable, "in your Kiro surface" is honest; it is never a shortcut for one you know.
 
 ## Visual deliverables (Senzing brand)
@@ -583,8 +583,13 @@ which interface. The bootcamp runs in more than one, and the names are not inter
   `docs/progress/recap_checkpoint.md`, refreshed at each step boundary with the module's
   accumulating Information Shared / Questions & Responses / Actions Taken / End-of-Module Summary-so-far, wrapped
   in `<!-- RECAP-CHECKPOINT:START -->` … `<!-- RECAP-CHECKPOINT:END -->` markers. This is what
-  survives a quit, compaction, or new session mid-module: the plugin's `PreCompact`, `SessionEnd`,
-  and `SessionStart` hooks fold it into `docs/bootcamp_recap.md` (append-only, idempotent). It is a
+  survives a quit, compaction, or new session mid-module: it is folded into
+  `docs/bootcamp_recap.md` (append-only, idempotent). **Kiro provides no `PreCompact` and no
+  `SessionEnd` trigger, so folding is yours to do** — at module completion, at graduation, at
+  session close-out, and whenever you are given any signal that the conversation is about to be
+  compacted or trimmed. The `senzing-bootcamp-session-start` hook does it mechanically on a new
+  session when the enforcement hooks are installed, which backs the rule and never replaces it.
+  See `senzing-bootcamp-tier1-recap-folding.md` for the full rule. It is a
   single small file updated at step boundaries (INV-012), not per sub-step, and it is finalized and
   cleared on module completion (see `module-completion.md`).
   **The plugin creates the file; you write what is in it.** `checkpoint-tick.py`
@@ -672,12 +677,12 @@ the 👉 protocol above).
   one, and do not advance.
 - **A host control the bootcamper raises — in any form:** whether they **ask about** auto mode,
   auto-accept edits, permission mode, plan mode, fast mode, background tasks, `/compact`, `/loop` or
-  any other setting belonging to their Claude session rather than to the bootcamp, **or tell you
+  any other setting belonging to their Kiro session rather than to the bootcamp, **or tell you
   that a prompt for one appeared over the bootcamp**, answer in **one sentence** — it is their
   session setting, the bootcamp neither needs nor recommends a value — and then re-present the
   pending 👉 question verbatim (see below). Do not turn it into a gate, do not offer to change it for
-  them, and do **not** claim the bootcamp can suppress or override a host control: the plugin ships
-  skills, hooks and commands, none of which reach their interface. **Do not name a dismissal
+  them, and do **not** claim the bootcamp can suppress or override a host control: the Power ships
+  skills and hook definitions, none of which reach their interface. **Do not name a dismissal
   affordance either** — not "Don't show again", not any other — because directing them to a control
   that silences a host prompt is directing them to operate a second Kiro-surface control. The
   bootcamp asks them to operate exactly one, the module-start model/effort switch, and never this
@@ -694,7 +699,7 @@ the 👉 protocol above).
     `feedback.md` Step 4 mandates this for the feedback detour specifically; the same rule applies
     to every other interruption.
 
-    ⚠️ **The host-rendered case is the one you may never see.** A prompt the bootcamper's Claude
+    ⚠️ **The host-rendered case is the one you may never see.** A prompt the bootcamper's Kiro
     interface draws over the bootcamp is its UI, not a turn in this conversation — if they dismiss
     it, nothing about it reaches you. So this recovery fires on the evidence you actually get: they
     mention it, or they answer something that does not fit the pending question. Treat either as an
@@ -752,14 +757,14 @@ the 👉 protocol above).
 
   Like the step overview and the time estimate, this is module-start apparatus, so
   the apparatus-exempt setup modules (Bootcamp preparation, Module 0) do not present it (INV-063
-  clarification). **Adapt the wording to the Kiro surface in use** (INV-098): on the **Claude
-  Code CLI** present the exact `/model` and `/effort` commands; in **Kiro, the Claude web
-  app, or the Kiro IDE** — or when the interface is unknown — phrase it by intent, naming
+  clarification). **Adapt the wording to the Kiro surface in use** (INV-098): on the **Kiro
+  CLI** present the exact `/model` and `/effort` commands; in **Kiro, Kiro on the
+  web, or the Kiro IDE** — or when the interface is unknown — phrase it by intent, naming
   the recommended model and reasoning-effort level and directing the bootcamper to that interface's
   model/effort controls, without hardcoding a UI label that may drift.
 
-  ⛔ **Name the interface. "The Claude app" is retired vocabulary (INV-158).** This plugin is a
-  Kiro plugin on every one of those interfaces — Kiro runs Kiro too — so
+  ⛔ **Name the interface. "The Kiro app" is retired vocabulary (INV-158).** This Power is the
+  same Power on every one of those interfaces, so
   that phrase left the bootcamper guessing which controls were meant, and "Kiro" on its own
   does not distinguish the terminal from the desktop application. Say **Kiro CLI** for the
   terminal and **Kiro** for the desktop application.
@@ -872,8 +877,8 @@ the 👉 protocol above).
 
     1. **The dial is not yet set** — the ordinary case, unchanged. Open the reply turn with a
        one-line statement telling the bootcamper how to make the change (run the `/model`/`/effort`
-       commands in the Kiro CLI, or use the model and reasoning-effort controls in Claude
-       Desktop / Kiro on the web / the Kiro IDE — naming only the dial that is
+       commands in the Kiro CLI, or use the model and reasoning-effort controls in
+       Kiro / Kiro on the web / the Kiro IDE — naming only the dial that is
        moving), then end the turn on this pinned confirmation gate (its question verbatim,
        INV-056/INV-069 — only the answer hint adapts to the interface) — do NOT show Step 1 yet:
 
@@ -953,8 +958,8 @@ the 👉 protocol above).
   | Query, Visualize and Discover | Opus 5, high effort | Opus 5 in the model picker · high in the effort picker |
   | Bootcamp graduation | Opus 5, high effort | Opus 5 in the model picker · high in the effort picker |
 
-  The **Recommended** column is interface-neutral. In Kiro, Kiro on the web, or a Claude
-  IDE extension, set the same model and reasoning effort using that interface's model/effort controls;
+  The **Recommended** column is interface-neutral. In Kiro, Kiro on the web, or the Kiro
+  IDE, set the same model and reasoning effort using that interface's model/effort controls;
   the **Where to set it in Kiro** column is the Kiro CLI equivalent (INV-098).
 
   ⚠️ **These effort values are a recommended floor for value, not a ceiling.** The table never goes

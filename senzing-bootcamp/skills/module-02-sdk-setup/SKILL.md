@@ -193,14 +193,14 @@ MCP server. `get_capabilities` reports `senzing_version` as the string `"current
   for these in its response and do not find them, that is expected, not an error: use the ones
   below as given.
 
-  ⚠️ **The plugin-owned commands are exercised on Linux only.** This plugin's own test suite runs
+  ⚠️ **The Power-owned commands are exercised on Linux only.** This Power's own test suite runs
   on Linux, so the `brew` and `scoop` forms below are standard package-manager usage that no test
   here has ever executed. Treat their *output* as the thing to check, not their success: read what
   the command actually printed rather than assuming the version it reported, and on macOS obey the
   zero-exit-code warning further down without exception. This is the same discipline INV-163
   requires — say what you could not verify — applied to a command rather than a check.
 
-⚠️ **On macOS and Windows the update command is plugin-owned too.** The server documents
+⚠️ **On macOS and Windows the update command is Power-owned too.** The server documents
 `brew install --cask` and `scoop install`, never `brew upgrade --cask` or `scoop update` (checked
 across `install_commands`, `gotchas` and `post_install` for both, re-confirmed 2026-08-13). Only on
 apt and yum is the update command the same server-documented `install` command. That asymmetry is the
@@ -216,14 +216,14 @@ same coverage gap reported upstream on 2026-08-13 — the server documents insta
 <!-- MCP-NEGATIVE: sdk_guide(topic='install', platform='linux_apt') — install_commands, gotchas and post_install carry no dpkg-query and no apt-cache policy; it verifies with ls /opt/senzing/er/lib/libSz.so, an existence probe — owner: sdk_guide(topic='install', platform='linux_apt') IS the route that would carry an installed-version query for apt, and it documents installing and existence-verification only (absence negative) — server 1.32.9, 2026-08-13 -->
 
 ```bash
-# plugin-owned — sdk_guide documents neither of these
+# Power-owned — sdk_guide documents neither of these
 dpkg-query -W -f='${Version}\n' senzingsdk-runtime   # installed, e.g. 4.3.3-26191
 apt-cache policy senzingsdk-runtime                  # Candidate: is what the repo offers
 # server-documented — re-read from sdk_guide; this form is a dated illustration
 sudo apt install -y senzingsdk-runtime senzingsdk-setup   # takes the newest available
 ```
 
-**Linux, yum/dnf (`linux_yum`):** *plugin-owned* —
+**Linux, yum/dnf (`linux_yum`):** *Power-owned* —
 `rpm -q --qf '%{VERSION}-%{RELEASE}\n' senzingsdk-runtime` for installed, and
 `yum check-update senzingsdk-runtime` for available (**`dnf` on RHEL 8+/Fedora**).
 *Server-documented* — `sudo yum install -y senzingsdk-runtime senzingsdk-setup` to update
@@ -239,7 +239,7 @@ sudo apt install -y senzingsdk-runtime senzingsdk-setup   # takes the newest ava
 <!-- MCP-NEGATIVE: sdk_guide(topic='install', platform='macos_arm') — no brew outdated, brew info or brew upgrade anywhere in the response; the brew commands it does carry are tap, trust, install --cask, uninstall --cask, untap, install/link libpq, and --prefix — owner: sdk_guide(topic='install', platform='macos_arm') IS the route that would carry a version-management command for the cask, and it carries none (absence negative) — server 1.32.9, 2026-08-13 -->
 
 ```bash
-# ALL plugin-owned — sdk_guide documents no brew version-management command:
+# ALL Power-owned — sdk_guide documents no brew version-management command:
 # never outdated, info or upgrade (checked across its whole response, 2026-08-13)
 brew outdated --cask senzingsdk    # nothing printed = up to date
 brew info --cask senzingsdk        # installed and latest versions
@@ -265,7 +265,7 @@ paths still resolve.
 <!-- MCP-NEGATIVE: sdk_guide(topic='install', platform='windows') — no scoop status, scoop info or scoop update anywhere in the response; the scoop commands it does carry are bucket add, install, and config (for the EULA variable) — owner: sdk_guide(topic='install', platform='windows') IS the route that would carry a version-management command for Scoop, and it carries none (absence negative) — server 1.32.9, 2026-08-13 -->
 
 ```powershell
-# plugin-owned — sdk_guide documents no scoop version-management command:
+# Power-owned — sdk_guide documents no scoop version-management command:
 # never status, info or update (checked across its whole response, 2026-08-13)
 scoop status                          # lists packages with updates available
 scoop info senzingsdk/senzingsdk      # installed and latest versions

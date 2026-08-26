@@ -34,7 +34,7 @@ Read the plugin version from the plugin manifest (`plugin.json`, the `version`
 field) and hold it to display with the WELCOME banner (step 3) and to record in the recap.
 **Resolve the manifest in this order and stop at the first that reads (INV-252):**
 
-1. `${PLUGIN_ROOT}/plugin.json`, when `CLAUDE_PLUGIN_ROOT` is set **and
+1. `${PLUGIN_ROOT}/plugin.json`, when `PLUGIN_ROOT` is set **and
    non-empty**.
 2. `<this-skill-dir>/../../plugin.json` — this skill's own directory, two levels
    up. The harness supplies that directory at invocation, so by construction it belongs to the
@@ -45,7 +45,7 @@ field) and hold it to display with the WELCOME banner (step 3) and to record in 
 ⛔ **Never search the filesystem for a `plugin.json`, and never read one outside the resolved
 plugin root.** Two plugin roots on one machine is a normal state, not a broken one — an installed
 plugin plus a clone, or an upgrade whose old copy was never removed — so the first match a search
-reaches is not the plugin serving this run. With `CLAUDE_PLUGIN_ROOT` empty, a search made the
+reaches is not the plugin serving this run. With `PLUGIN_ROOT` empty, a search made the
 banner report `v0.5.0` from a second checkout while `0.5.1` was running, and a version line that
 can be wrong is worse than none: its whole job is provenance.
 
@@ -79,7 +79,7 @@ code in the chosen language, looks up Senzing facts, and provides working exampl
   Troubleshooting:
   1. Verify internet connectivity.
   2. Confirm the "senzing" MCP server is configured and enabled in Kiro
-     (it ships with this plugin's .mcp.json, pointing at https://mcp.senzing.com/mcp).
+     (it ships with this Power's mcp.json, pointing at https://mcp.senzing.com/mcp).
   3. If behind a corporate proxy, allowlist mcp.senzing.com.
 
   After fixing the connection, say "retry".
@@ -115,8 +115,9 @@ Do this silently:
    is what makes Step 12 an **update** rather than an instruction to edit a file that does not
    exist — the file is written silently, like the rest of this step (INV-012).
 
-(The Kiro Power installed Agent Hooks here via `createHook`. In the Claude plugin, hooks ship
-with the plugin in `hooks/hooks.json` and are already active - there is no hook-install step.)
+(No hook-install step belongs here. The bootcamp's rules are always in force as instructions
+(Tier 1); installing Kiro hook definitions into `.kiro/hooks/` is optional, separate, and consented
+to through the `bootcamp-enforcement-setup` skill.)
 
 ## 2. Prerequisite check
 
