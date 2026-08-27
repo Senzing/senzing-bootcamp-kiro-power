@@ -14,3 +14,13 @@ updates:
           - "senzing-factory/*"
     schedule:
       interval: "daily"
+
+  # Dependencies of the power-validation tooling in .github/tools/.
+  - package-ecosystem: "pip"
+    assignees:
+      - "kernelsam"
+    cooldown:
+      default-days: 21
+    directory: "/.github/tools"
+    schedule:
+      interval: "weekly"
