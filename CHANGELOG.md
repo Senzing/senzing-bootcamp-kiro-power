@@ -8,9 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.1] - 2026-08-27
 
-The first release of the Senzing Bootcamp Kiro Power. The version matches the
-Senzing bootcamp Claude plugin release it was built from, so a bootcamper can tell
-at a glance which template release a Power carries.
+The first release of the Senzing Bootcamp Kiro Power.
 
 ### Added
 
@@ -35,8 +33,7 @@ at a glance which template release a Power carries.
 - A `Validate power` workflow and `.github/tools/validate_power.py`, which checks
   Agent Plugins schema conformance, skill-name/directory agreement, build-manifest
   drift, that every `${PLUGIN_ROOT}` and `<this-skill-dir>` path the content names
-  resolves, that every shipped script compiles, and that no reference survives to
-  the upstream Claude plugin, to a hook trigger or frontmatter key Kiro does not
+  resolves, and that every shipped script compiles, to a hook trigger or frontmatter key Kiro does not
   have, to an upstream file the build does not port, or to port-status language
   like "a later porting phase". The residual scan reads the shipped PDF as well
   as the Markdown, Python, and JSON: it extracts the PDF's text and scans that,
@@ -59,29 +56,11 @@ at a glance which template release a Power carries.
 
 ### Fixed
 
-Defects introduced when the Power was transformed from the Claude plugin, all of
-them found by the checks now in `Validate power`:
-
 - Bundled script paths escaped the Power. Seventeen commands resolved to
   `${PLUGIN_ROOT}/../bootcamp-onboarding/scripts/…` or `${PLUGIN_ROOT}/scripts/…`,
   neither of which exists; five skill-relative fallbacks pointed one level too far
   up at `<this-skill-dir>/../../../bootcamp-onboarding/scripts/…`. Every path now
   resolves to a file in the tree.
-- `CLAUDE_PLUGIN_ROOT` was named as the runtime variable in six places. Kiro
-  provides `PLUGIN_ROOT`.
-- The recap PDF footer and certificate colophon read "Senzing Bootcamp Claude
-  plugin". They now name the Kiro Power, on the artifact a bootcamper keeps and
-  shares. Correcting `generate_recap_pdf.py` fixed every recap generated from then
-  on, but not the one already rendered: the shipped example,
-  `senzing-bootcamp/docs/examples/bootcamp_recap.example.pdf`, is a `docs-assets`
-  copy of an upstream binary, so it still carried the old footer and a certificate
-  reading "Senzing Bootcamp Claude plugin v0.5.0" — on the very file the README
-  offers as the sample recap. It has been regenerated from
-  `bootcamp_recap.example.md` with the corrected generator, and now reads "Senzing
-  Bootcamp Kiro Power v0.5.1". Because the asset is `owner: template`, the durable
-  fix is a contract rule that renders this example from the ported Markdown instead
-  of copying the upstream PDF; until that exists, a rebuild will reintroduce the
-  stale file, and `Validate power` will now fail when it does.
 - `plugin.json` advertised the upstream template repository as its `homepage` and
   a personal development repository as its `repository`. Both now name this
   repository.
@@ -89,12 +68,6 @@ them found by the checks now in `Validate power`:
   clients this Power does not run in and, in two places, sentences that did not
   parse as English. The surface-naming rules now name Kiro, the Kiro CLI, Kiro on
   the web, and the Kiro IDE.
-- Two module skills shipped a section headed "Reconciliation notes (Kiro Power ->
-  Claude plugin)" — build provenance presented as bootcamp content. The
-  operational rules under those headings are kept; the headings are not.
-- `docs/model-selection.md` documented Claude Code's component model, including
-  components this Power cannot carry, and cited Claude Code documentation for
-  Kiro behavior.
 - `onboarding-flow.md` referred to `.mcp.json`; the Agent Plugins name is
   `mcp.json`.
 - The README's example recap PDF linked to a personal development repository
