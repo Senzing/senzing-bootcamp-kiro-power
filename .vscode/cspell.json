@@ -104,6 +104,7 @@
     "javac",
     "javax",
     "jsmith",
+    "jsonschema",
     "kernelsam",
     "kiro",
     "Kusha",
@@ -241,8 +242,8 @@
     "Xlint",
     "XLITERATOR",
     "YREST",
-    "\u0141ukasz",
-    "\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440"
+    "Łukasz",
+    "Владимир"
   ],
   "ignorePaths": [
     ".git/**",

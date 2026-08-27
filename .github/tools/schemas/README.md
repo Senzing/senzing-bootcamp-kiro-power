@@ -4,10 +4,10 @@ These two files are verbatim copies of the [Agent Plugins] v1.0.0 JSON Schemas,
 fetched from the canonical URLs that `senzing-bootcamp/plugin.json` and
 `senzing-bootcamp/mcp.json` name in their own `$schema` fields:
 
-| File                 | Source                                                          |
-| -------------------- | --------------------------------------------------------------- |
-| `plugin.schema.json` | <https://agent-plugins.org/schemas/1.0.0/plugin.schema.json>     |
-| `mcp.schema.json`    | <https://agent-plugins.org/schemas/1.0.0/mcp.schema.json>        |
+| File                 | Source                                                       |
+| -------------------- | ------------------------------------------------------------ |
+| `plugin.schema.json` | <https://agent-plugins.org/schemas/1.0.0/plugin.schema.json> |
+| `mcp.schema.json`    | <https://agent-plugins.org/schemas/1.0.0/mcp.schema.json>    |
 
 They are vendored rather than fetched at validation time so that
 `validate_power.py` gives the same answer offline as it does in CI, and so a
