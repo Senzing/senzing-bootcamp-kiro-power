@@ -85,7 +85,7 @@
       "ruleId": "docs-assets",
       "owner": "template",
       "sourcePath": "plugins/senzing-bootcamp/docs/examples/bootcamp_recap.example.pdf",
-      "sha256": "7e9282664d723f491a5e21b4a9661dcc7c80a54341c034309c46918ee4f38fbd"
+      "sha256": "4e2dc8c32ab70941c1bec59b16e19e0b84faf1343c01c73c90d0885a4047fd35"
     },
     {
       "path": "docs/examples/bootcamp_recap.example.truthset.png",

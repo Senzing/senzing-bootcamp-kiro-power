@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.1] - 2026-08-25
+## [0.5.1] - 2026-08-27
 
 The first release of the Senzing Bootcamp Kiro Power. The version matches the
 Senzing bootcamp Claude plugin release it was built from, so a bootcamper can tell
@@ -38,8 +38,12 @@ at a glance which template release a Power carries.
   resolves, that every shipped script compiles, and that no reference survives to
   the upstream Claude plugin, to a hook trigger or frontmatter key Kiro does not
   have, to an upstream file the build does not port, or to port-status language
-  like "a later porting phase". Every check is negative-tested: each one has been
-  confirmed to fail on an injected regression, not just to pass on a clean tree.
+  like "a later porting phase". The residual scan reads the shipped PDF as well
+  as the Markdown, Python, and JSON: it extracts the PDF's text and scans that,
+  so a stale rendered artifact cannot pass on the strength of a matching digest,
+  and a PDF whose text cannot be extracted fails rather than passing without
+  being read. Every check is negative-tested: each one has been confirmed to
+  fail on an injected regression, not just to pass on a clean tree.
 
 ### Removed
 
@@ -67,7 +71,17 @@ them found by the checks now in `Validate power`:
   provides `PLUGIN_ROOT`.
 - The recap PDF footer and certificate colophon read "Senzing Bootcamp Claude
   plugin". They now name the Kiro Power, on the artifact a bootcamper keeps and
-  shares.
+  shares. Correcting `generate_recap_pdf.py` fixed every recap generated from then
+  on, but not the one already rendered: the shipped example,
+  `senzing-bootcamp/docs/examples/bootcamp_recap.example.pdf`, is a `docs-assets`
+  copy of an upstream binary, so it still carried the old footer and a certificate
+  reading "Senzing Bootcamp Claude plugin v0.5.0" — on the very file the README
+  offers as the sample recap. It has been regenerated from
+  `bootcamp_recap.example.md` with the corrected generator, and now reads "Senzing
+  Bootcamp Kiro Power v0.5.1". Because the asset is `owner: template`, the durable
+  fix is a contract rule that renders this example from the ported Markdown instead
+  of copying the upstream PDF; until that exists, a rebuild will reintroduce the
+  stale file, and `Validate power` will now fail when it does.
 - `plugin.json` advertised the upstream template repository as its `homepage` and
   a personal development repository as its `repository`. Both now name this
   repository.
