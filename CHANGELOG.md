@@ -41,9 +41,12 @@ sixteen: 66 files changed in the Power, 7 of them new.
   `…_PLUGIN_FEEDBACK.md`, which named the wrong artifact — this is a Power. Feedback
   collected under the old name is not migrated: rename the file if you have one, or let a
   new one be created beside it.
-- The example recap (`docs/examples/bootcamp_recap.example.md`) now shows the
-  "Notes, Ideas and Questions" section the new note-taking skill produces, so the example
-  reflects what a 0.5.3 bootcamp finishes with.
+- The example recap now shows the "Notes, Ideas and Questions" section the new note-taking
+  skill produces, so the example reflects what a 0.5.3 bootcamp finishes with. Both halves
+  of it: `docs/examples/bootcamp_recap.example.md` and the rendered
+  `docs/examples/bootcamp_recap.example.pdf`, regenerated from that Markdown so the two
+  agree. The PDF reports `Plugin version: 0.5.3` and its certificate colophon reads
+  "Senzing Bootcamp Kiro Power v0.5.3".
 
 ### Fixed
 
@@ -53,15 +56,6 @@ sixteen: 66 files changed in the Power, 7 of them new.
   instead, which is what the surrounding instruction already said to do. Release 0.5.1 had
   removed this class of language throughout, and a single word of British-to-American
   spelling drift in the upstream template silently un-removed this one instance.
-
-### Known issues
-
-- The rendered example recap PDF (`docs/examples/bootcamp_recap.example.pdf`) is still the
-  0.5.1 render: it reports `Plugin version: 0.5.1` and does not show the notes section its
-  Markdown companion now carries. The PDF is a pre-built asset copied byte-for-byte from the
-  template release, so regenerating it is an upstream change. It is an illustration only —
-  nothing in the bootcamp reads it, and the recap a bootcamper generates is built from their
-  own run.
 
 [template 0.5.3]: https://github.com/Senzing/senzing-bootcamp-claude-plugin/releases/tag/0.5.3
 
