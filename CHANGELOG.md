@@ -6,6 +6,59 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.3] - 2026-09-10
+
+Built from [Senzing Bootcamp Claude plugin 0.5.3][template 0.5.3]. Eighteen skills, up from
+sixteen: 66 files changed in the Power, 7 of them new.
+
+### Added
+
+- **Take a note, at any point in the bootcamp.** A new `bootcamp-note` skill captures an
+  idea, a question, a reminder, or a to-do to `docs/bootcamp_notes.md`. Say "take a Senzing
+  bootcamp note". Written into your project and sent nowhere.
+- **Package the bootcamp into one file.** A new `package-bootcamp` skill collects the
+  bootcamp into a single transferable zip under `backups/packages/`, so a bootcamp can move
+  between machines or be handed to someone else. Say "package the Senzing bootcamp". Also
+  local only, and it scans what it collects for secrets rather than archiving them blind.
+- **A database backup you can come back to.** Graduation now writes a revisit bundle of the
+  resolved repository, so the entity-resolution results outlive the bootcamp session. One
+  shared procedure (`skills/graduation/database-backup.md`) serves both graduation and the
+  packaging flow, handles SQLite and PostgreSQL, and refuses to guess when the database type
+  is indeterminate rather than aiming `pg_dump` at a SQLite file.
+- A seventh check in `Validate power`, `residual-development`, which fails if shipped content
+  names the repository the Power is built in. That repository holds the transformation
+  contract, the build engine, and the maintainer tooling, none of which is published here,
+  so a path into it resolves to nothing from this repository and to nothing on a
+  bootcamper's disk. Negative-tested like the other six: confirmed to fail on an injected
+  reference, and confirmed to fail on the 0.5.1 tree, which named one such path four times.
+
+### Changed
+
+- Content updated across all nine modules, onboarding, preparation, and graduation. The
+  larger revisions are in module 07 (query, visualize, discover) and in the Truth Set
+  visualization API reference, which gains roughly 350 lines of endpoint and payload detail.
+- The feedback file is now `docs/feedback/SENZING_BOOTCAMP_POWER_FEEDBACK.md`. It was
+  `…_PLUGIN_FEEDBACK.md`, which named the wrong artifact — this is a Power. Feedback
+  collected under the old name is not migrated: rename the file if you have one, or let a
+  new one be created beside it.
+- The example recap now shows the "Notes, Ideas and Questions" section the new note-taking
+  skill produces, so the example reflects what a 0.5.3 bootcamp finishes with. Both halves
+  of it: `docs/examples/bootcamp_recap.example.md` and the rendered
+  `docs/examples/bootcamp_recap.example.pdf`, regenerated from that Markdown so the two
+  agree. The PDF reports `Plugin version: 0.5.3` and its certificate colophon reads
+  "Senzing Bootcamp Kiro Power v0.5.3".
+
+### Fixed
+
+- Module 1 told bootcampers that the full entity-resolution pattern gallery was "a later
+  porting phase". No gallery is bundled and none is planned, so the aside described a
+  deliverable that does not exist; the step retrieves patterns from the Senzing MCP server
+  instead, which is what the surrounding instruction already said to do. Release 0.5.1 had
+  removed this class of language throughout, and a single word of British-to-American
+  spelling drift in the upstream template silently un-removed this one instance.
+
+[template 0.5.3]: https://github.com/Senzing/senzing-bootcamp-claude-plugin/releases/tag/0.5.3
+
 ## [0.5.1] - 2026-08-27
 
 The first release of the Senzing Bootcamp Kiro Power.
@@ -108,4 +161,5 @@ The first release of the Senzing Bootcamp Kiro Power.
   and data values, not prose.
 
 [0.5.1]: https://github.com/Senzing/senzing-bootcamp-kiro-power/releases/tag/0.5.1
+[0.5.3]: https://github.com/Senzing/senzing-bootcamp-kiro-power/releases/tag/0.5.3
 [Senzing MCP server]: https://mcp.senzing.com/mcp
