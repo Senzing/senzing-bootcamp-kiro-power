@@ -7,7 +7,7 @@ upstream template release by a transformation contract, and
 This script checks the things a reader of the repository cannot check by eye and
 that a rebuild would otherwise have to discover the hard way.
 
-Six checks, each independent and each reported whether or not the others pass —
+Seven checks, each independent and each reported whether or not the others pass —
 a run reports every problem it can find rather than stopping at the first:
 
 1. ``manifests``  ``plugin.json`` and ``mcp.json`` against the vendored Agent
@@ -25,6 +25,13 @@ a run reports every problem it can find rather than stopping at the first:
                   no reference to the upstream Claude plugin survives in shipped
                   content, including inside the shipped PDF, whose text is
                   extracted and scanned rather than only hashed.
+7. ``residual-development``
+                  no reference to the development repository the Power is built
+                  in survives either. Distinct from check 6 because the two are
+                  different problems: the upstream release is a synchronization
+                  fact this repository records on purpose, while the build
+                  repository is private infrastructure that resolves to nothing
+                  from here.
 
 Exit status is 0 only when every check passes. ``--json`` prints the same result
 as data. No network access, no Senzing install, and no MCP server: the only
@@ -139,6 +146,57 @@ MISSING_TRIGGER_ALLOWLIST = {
 }
 
 MISSING_TRIGGER_NEEDLES = {"PreCompact", "SessionEnd"}
+
+# Residual references to the *development* repository — the one the Power is built
+# in, as distinct from the upstream Claude plugin it is ported from. Both are
+# elsewhere, and they are different problems.
+#
+# The upstream template repository is a synchronization fact: `.build-manifest.json`
+# records which release produced this tree, and a reader needs it. The development
+# repository is not. It is where the transformation contract, the engine, the specs,
+# and the maintainer tooling live, and none of that is published here. A path or a
+# name from it in this tree points a reader at a repository they cannot open, and
+# tells a bootcamper to look for a file that does not exist on their disk either.
+#
+# This check exists because that leakage is invisible to every other check. The
+# strings are legal content, they resolve to nothing, and nothing else notices:
+# release 0.5.1 shipped with `tools/bootcamp-transform/contract.yaml` named twice in
+# each of two build-provenance records, and it passed all six checks.
+DEVELOPMENT_PATTERNS = (
+    (
+        "senzing-bootcamp-kiro-power-development",
+        "names the development repository, which is not published",
+    ),
+    (
+        "docktermj/senzing-bootcamp-kiro-power",
+        "names the development repository by owner and stem",
+    ),
+    (
+        "tools/bootcamp-transform",
+        "a path that exists only in the development repository",
+    ),
+    (
+        "powers/senzing-bootcamp",
+        "the Power's path in the development repository; here the Power is at senzing-bootcamp/",
+    ),
+    (
+        ".kiro/specs/senzing-bootcamp-power",
+        "the development repository's spec directory",
+    ),
+    (
+        "senzing-bootcamp-maintainer",
+        "the maintainer Power, which exists only in the development repository",
+    ),
+)
+
+# Deliberately absent from DEVELOPMENT_PATTERNS: `docktermj/senzing-bootcamp-free-data`,
+# which several skills cite as a source of practice data. It is a data catalog a
+# bootcamper is meant to open, not build tooling, and the needle above does not match
+# it. Also absent: the glossary terms the development repository's requirements define
+# (`Template_Release`, `Bootcamp_Power`, `Hook_Installer`). Those name concepts rather
+# than that repository, and they appear in shipped prose — changing them is a content
+# decision for the template and the transformation contract, not a publication one.
+DEVELOPMENT_ALLOWLIST: dict[str, str] = {}
 
 FRONTMATTER_NAME = re.compile(r"^name:\s*[\"']?([^\"'\n]+?)[\"']?\s*$", re.MULTILINE)
 
@@ -592,6 +650,60 @@ def check_residual_upstream(root: Path) -> Check:
     return check
 
 
+def check_residual_development(root: Path) -> Check:
+    """No reference to the development repository survives in shipped content.
+
+    The PDF is scanned too, by the same extractor ``check_residual_upstream``
+    uses and for the same reason: a pre-built asset can carry a string long after
+    the generator that produces it was corrected, and a digest cannot tell the
+    difference between "these bytes are what we recorded" and "these bytes are
+    right".
+    """
+    check = Check(
+        "residual-development",
+        "no reference to the development repository this Power is built in",
+    )
+
+    for relative in shipped_files(root):
+        is_pdf = relative.suffix in PDF_SUFFIXES
+        if relative.suffix not in TEXT_SUFFIXES and not is_pdf:
+            continue
+
+        key = str(relative)
+        if key in DEVELOPMENT_ALLOWLIST:
+            check.warnings.append(f"{key}: exempt — {DEVELOPMENT_ALLOWLIST[key]}")
+            continue
+
+        check.examined += 1
+
+        if is_pdf:
+            runs = pdf_text_runs(root / relative)
+            if not runs:
+                check.findings.append(
+                    f"{key}: no text could be extracted, so the development-reference "
+                    "scan could not run on a shipped PDF"
+                )
+                continue
+            seen: set[str] = set()
+            for index, run in enumerate(runs):
+                for needle, why in DEVELOPMENT_PATTERNS:
+                    if needle not in run or needle in seen:
+                        continue
+                    seen.add(needle)
+                    check.findings.append(
+                        f"{key}:stream{index // 2}: {needle!r} — {why} "
+                        "(in extracted PDF text; regenerate the asset)"
+                    )
+            continue
+
+        for line_number, line in enumerate(read_text(root / relative).splitlines(), start=1):
+            for needle, why in DEVELOPMENT_PATTERNS:
+                if needle in line:
+                    check.findings.append(f"{key}:{line_number}: {needle!r} — {why}")
+
+    return check
+
+
 CHECKS = (
     check_manifests,
     check_skills,
@@ -599,6 +711,7 @@ CHECKS = (
     check_plugin_root_paths,
     check_python,
     check_residual_upstream,
+    check_residual_development,
 )
 
 
