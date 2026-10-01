@@ -1,0 +1,212 @@
+<!doctype html>
+<!--
+  Kiro quick-start page for the Senzing Bootcamp.
+  The install steps, commands, URLs, UI labels and plan minimum come from this
+  repo's README.md ("Requirements" and "Install and start"). When those change
+  in README.md, update this page too.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Senzing Bootcamp for Kiro</title>
+    <meta name="description" content="Install the Senzing Bootcamp Kiro Power and start the bootcamp: from nothing installed to a running bootcamp in Kiro’s agentic chat.">
+    <link rel="canonical" href="https://hub.senzing.com/senzing-bootcamp-kiro-power/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Senzing Bootcamp for Kiro">
+    <meta property="og:description" content="From nothing installed to a running Senzing Bootcamp in Kiro, in six steps.">
+    <meta property="og:url" content="https://hub.senzing.com/senzing-bootcamp-kiro-power/">
+    <meta name="theme-color" content="#0F0D0C">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&amp;family=Roboto+Mono:wght@400;500&amp;display=swap">
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="brand" href="#top" aria-label="Senzing Bootcamp for Kiro, back to top">
+          <img class="brand__mark" src="images/senzing-logo.png" alt="" width="32" height="32">
+          <span class="brand__word">SENZING</span>
+        </a>
+        <nav aria-label="Site">
+          <ul class="nav__links">
+            <li><a href="https://github.com/Senzing/senzing-bootcamp-kiro-power">GitHub</a></li>
+            <li><a class="nav__cta" href="https://hub.senzing.com/bootcamp/">All bootcamps</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero dark" id="top" aria-labelledby="hero-title">
+        <div class="wrap hero__inner">
+          <div>
+            <p class="label">Quick start</p>
+            <h1 id="hero-title">Senzing Bootcamp for <span class="grad">Kiro</span></h1>
+            <p class="lead">From nothing installed to a running bootcamp in Kiro’s agentic chat.</p>
+            <div class="actions">
+              <a class="btn btn--primary" href="#install">Get started</a>
+            </div>
+            <p class="hero__alt">New to the bootcamp? <a href="https://hub.senzing.com/bootcamp/">Start at hub.senzing.com/bootcamp</a></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="light white" id="before" aria-labelledby="before-title">
+        <div class="wrap">
+          <p class="label">Checklist</p>
+          <h2 id="before-title">Before you start</h2>
+          <ul class="checklist">
+            <li><strong>Plan:</strong> 2000 <a href="https://kiro.dev/pricing/">Kiro credits</a>.</li>
+            <li><strong>Network access to the Senzing MCP server</strong> (<code>https://mcp.senzing.com/mcp</code>). The bootcamp cannot proceed without it. On a corporate network or VPN, ask for the domain <code>mcp.senzing.com</code> to be allowed.</li>
+            <li><strong>A new, empty folder</strong> for the bootcamp.</li>
+            <li><em>Recommended, not mandatory:</em> a business problem that needs entity resolution, and 5,000 to 20,000 records that illustrate it.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="light offwhite" id="install" aria-labelledby="install-title">
+        <div class="wrap">
+          <p class="label">Six steps</p>
+          <h2 id="install-title">Install and start</h2>
+          <ol class="steps">
+            <li><a href="https://kiro.dev/">Install Kiro</a>.</li>
+            <li>
+              In a terminal, create a new, empty folder:
+              <div class="cmd"><pre><code>mkdir senzing-bootcamp</code></pre></div>
+            </li>
+            <li>
+              Change into it:
+              <div class="cmd"><pre><code>cd senzing-bootcamp</code></pre></div>
+            </li>
+            <li>
+              Start Kiro there:
+              <div class="cmd"><pre><code>kiro .</code></pre></div>
+              <p class="step__alt">Or: open Kiro and open a new project on an empty folder. This also works when the <code>kiro</code> command is not on your <code>PATH</code>.</p>
+            </li>
+            <li>
+              Install the Senzing Bootcamp Power:
+              <ol class="substeps" type="a">
+                <li>In Kiro’s left-hand icon bar, click the <strong>Powers</strong> icon.</li>
+                <li>In the <strong>Powers</strong> panel, under <strong>Installed</strong>, click <strong>Add Custom Power</strong>.</li>
+                <li>Select <strong>Import power from GitHub</strong>.</li>
+                <li>
+                  Paste this GitHub repository URL:
+                  <div class="cmd"><pre><code>https://github.com/Senzing/senzing-bootcamp-kiro-power/tree/main/senzing-bootcamp</code></pre></div>
+                </li>
+              </ol>
+              <p class="callout"><strong>Paste the full URL</strong>, including <code>/tree/main/senzing-bootcamp</code>. The power is in that subfolder; the repository root URL is not a power.</p>
+            </li>
+            <li>
+              In Kiro’s agentic chat, enter:
+              <div class="cmd"><pre><code>Start the bootcamp</code></pre></div>
+            </li>
+          </ol>
+          <p class="after-steps">Kiro’s agentic chat will guide you through the bootcamp.</p>
+        </div>
+      </section>
+
+      <section class="light white" id="next" aria-labelledby="next-title">
+        <div class="wrap">
+          <p class="label">After you start</p>
+          <h2 id="next-title">What happens next</h2>
+          <p class="prose">The bootcamp first asks you to choose your curriculum, level of detail, and programming language, then guides you module by module. <a href="https://hub.senzing.com/bootcamp/">See every module</a></p>
+        </div>
+      </section>
+
+      <section class="light offwhite" id="tips" aria-labelledby="tips-title">
+        <div class="wrap">
+          <p class="label">Good to know</p>
+          <h2 id="tips-title">Tips</h2>
+          <ul class="tips">
+            <li><strong>Model and effort:</strong> set them in Kiro’s chat model selector. The bootcamp suggests a model and effort at the start of each module, and only you, the Bootcamper, can change the setting.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="closing dark" id="other" aria-labelledby="other-title">
+        <div class="wrap">
+          <p class="label">Other platforms</p>
+          <h2 id="other-title">Using a different AI assistant?</h2>
+          <p class="lead">The same bootcamp runs in Claude and ChatGPT.</p>
+          <div class="actions">
+            <a class="btn btn--outline" href="https://hub.senzing.com/senzing-bootcamp-claude-plugin/">Claude</a>
+            <a class="btn btn--outline" href="https://hub.senzing.com/senzing-bootcamp-chatgpt-plugin/">ChatGPT</a>
+            <a class="btn btn--outline" href="https://hub.senzing.com/bootcamp/">All bootcamps</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer dark">
+      <div class="wrap footer__inner">
+        <p class="brand">
+          <img class="brand__mark" src="images/senzing-logo.png" alt="Senzing logo" width="32" height="32">
+          <span class="brand__word">SENZING</span>
+        </p>
+        <p>Senzing Agentic AI Bootcamp · © 2026 Senzing, Inc.</p>
+        <ul class="footer__links">
+          <li><a href="https://hub.senzing.com/bootcamp/">All bootcamps</a></li>
+          <li><a href="https://github.com/Senzing/senzing-bootcamp-kiro-power">GitHub</a></li>
+          <li><a href="#top">Back to top</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+      // Adds a Copy button to each command block. Without JavaScript there is
+      // no button, and every command can still be selected and copied by hand.
+      document.querySelectorAll(".cmd").forEach(function (block) {
+        var code = block.querySelector("code");
+        var button = document.createElement("button");
+        var timer;
+
+        button.type = "button";
+        button.className = "cmd__copy";
+        button.textContent = "Copy";
+        button.setAttribute("aria-live", "polite");
+
+        function show(label) {
+          button.textContent = label;
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            button.textContent = "Copy";
+          }, 2000);
+        }
+
+        function selectCommand() {
+          var range = document.createRange();
+          var selection = window.getSelection();
+          range.selectNodeContents(code);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+
+        button.addEventListener("click", function () {
+          var copied;
+          try {
+            copied = navigator.clipboard.writeText(code.textContent);
+          } catch (error) {
+            copied = Promise.reject(error);
+          }
+          copied.then(
+            function () {
+              show("Copied");
+            },
+            function () {
+              selectCommand();
+              show("Copy failed");
+            }
+          );
+        });
+
+        block.appendChild(button);
+      });
+    </script>
+  </body>
+</html>
