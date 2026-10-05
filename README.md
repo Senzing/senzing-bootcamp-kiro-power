@@ -33,6 +33,10 @@ recap PDF you can keep and share, and a production starter. See
   It generates SDK code,
   looks up Senzing facts,
   and provides working examples.
+- Python 3.10 or later.
+  The bootcamp's hooks and its graduation recap run on it.
+  Any command name works (`python3`, `python`, or `py`);
+  the bootcamp records the interpreter's full path when it sets up its hooks.
 - Minimum of 2000 [Kiro credits].
 - *Recommended, but not mandatory:*
   A business problem requiring Entity Resolution
