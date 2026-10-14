@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [0.6.1] - 2026-10-14
+Built from [Senzing Bootcamp Claude plugin 0.6.1][template 0.6.1]. Eighteen skills, as in
+0.5.3: 50 files changed in the Power, 1 of them new. Upstream 0.6.0 was never published, so
+its changes arrive here too; the [upstream changelog][template changelog 0.6.1] has the
+full list.
+### Added
+- **A graduation video.** Graduation offers an optional narrated, captioned two-minute
+  video, `docs/bootcamp_recap.mp4`, rendered offline by the new
+  `scripts/generate_recap_video.py` from a storyboard the guide writes. It carries
+  aggregates only (counts, source names, field names, statistics) and only screenshots
+  from tabs that cannot show record values, so it is safe to share. It never blocks
+  graduation: a declined voice install or a failed render skips it with one line.
+- **B-roll saved per module.** Module completion records each module's screenshots and
+  aggregate facts in `docs/video/broll.json` while they are still in context, so the
+  video does not have to reconstruct the bootcamp from memory.
+- **A type/name check in Module 5.** PERSON records whose name ends in an organization
+  suffix (`LLP`, `LTD`, `INC`, …) are reported for every source and put to you as retype
+  or keep, because a mistyped record can never resolve with the same organization in
+  another source.
+- **Returns that complete no module.** Module 5 can send a source back to Data collection
+  for a better export, and Module 7's quality verdict can send named sources back through
+  remapping and reloading, without rewriting the recap or the completed-module list.
+- **A how-state audit in Module 6.** Every multi-record entity is checked for an
+  unsettled final state and the result recorded in `docs/results_validation.md`; the
+  visualization's How? view shows the same state.
+- Samples and license-capped or SQLite-limited loads are recorded in the registry with
+  measured counts, so a clean load of a sample reconciles as expected rather than failed.
+  Multi-source loads compute a per-source budget before the run.
+- SDK setup records the installed version as `sdk_version`, and the recap reads it from
+  there.
+### Changed
+- Model guidance moves to Sonnet 5.5 and Opus 5.5, with Fable 5.1 as the top model, in
+  `docs/model-selection.md` and every module nudge.
+- The SDK license (EULA) question now comes first, before any package or binding is
+  installed, on every path.
+- Windows gets a dot-sourced PowerShell env script, `src\scripts\senzing-env.ps1`, in
+  place of `senzing-env.bat`, whose variables never reached a PowerShell session.
+- Language bindings follow the install route the Senzing MCP server names for each
+  language, never a public registry it does not name.
+- Generated test data gives each invented entity its own email, phone, and identifiers
+  unless a share is declared, so a scenario's ground truth no longer contradicts its own
+  merges.
+- Content updated across onboarding, all nine modules, and graduation, including the
+  example recap.
+### Fixed
+- Fixes carried from upstream, among them: the visualization's encoding self-check no
+  longer rejects correct captures, a capped graph no longer describes itself as the whole
+  datastore, and the visualization server refuses to render rather than silently falling
+  back to the D3 CDN when the vendored copy is missing. The upstream changelog lists the
+  rest.
+- Three skills carried port-status asides about "later porting phases". They were removed
+  in the build before publication, as 0.5.1 did for the rest of the Power.
+[template 0.6.1]: https://github.com/Senzing/senzing-bootcamp-claude-plugin/releases/tag/0.6.1
+[template changelog 0.6.1]: https://github.com/Senzing/senzing-bootcamp-claude-plugin/blob/main/CHANGELOG.md#061---2026-10-05
 
 ## [0.5.3] - 2026-09-10
 
